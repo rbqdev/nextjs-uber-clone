@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/shadcn/utils";
+import Script from "next/script";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -27,7 +28,7 @@ export default function RootLayout({
         )}
       >
         <header className="flex items-center justify-center min-h-[65px] border-b">
-          <div className="flex items-center justify-between w-full max-w-[1200px] px-6">
+          <div className="flex items-center justify-between w-full max-w-[1400px] px-6">
             <h1 className="text-4xl font-bold">Goober</h1>
 
             <div className="flex items-center gap-2">

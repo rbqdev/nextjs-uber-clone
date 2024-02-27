@@ -9,5 +9,5 @@ export default function DashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <section>{children}</section>;
+  return <section className="w-full max-w-[1400px] px-6">{children}</section>;
 }
