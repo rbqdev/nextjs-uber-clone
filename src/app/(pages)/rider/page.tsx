@@ -60,11 +60,11 @@ export default function Rider() {
   const [map, setMap] = useState(null);
   const [directionRoutePoints, setDirectionRoutePoints] = useState(null);
 
-  const onLoad = useCallback((map) => {
+  const onLoad = useCallback((map: any) => {
     setMap(map);
   }, []);
 
-  const onUnmount = useCallback((map) => {
+  const onUnmount = useCallback((map: any) => {
     setMap(null);
   }, []);
 
@@ -104,7 +104,8 @@ export default function Rider() {
 
   useEffect(() => {
     if (source) {
-      map.panTo({
+      // @ts-ignore
+      map?.panTo({
         lat: source.lat,
         lng: source.lng,
       });
@@ -125,6 +126,7 @@ export default function Rider() {
         },
         (result, status) => {
           if (status === "OK") {
+            // @ts-ignore
             setDirectionRoutePoints(result);
           } else {
             console.error("Error to set routes");
@@ -158,6 +160,7 @@ export default function Rider() {
         (result, status) => {
           if (status === "OK") {
             console.log({ result });
+            // @ts-ignore
             setDirectionRoutePoints(result);
           } else {
             console.error("Error to set routes");
@@ -172,6 +175,7 @@ export default function Rider() {
   }, [destination, source]);
 
   const submitRideOrder = () => {
+    // @ts-ignore
     const route = directionRoutePoints?.routes[0].legs[0];
     const body = {
       userId: "userId",
@@ -188,17 +192,6 @@ export default function Rider() {
     console.log({ body });
     // mutation
   };
-
-  /**
-   * API function to get a ride
-   * {
-     userId: X,
-     price: X.XX,
-     distance: X, 
-     duration: X, 
-     
-      };
-   */
 
   return (
     <div className="h-full flex gap-4">
@@ -287,7 +280,10 @@ export default function Rider() {
                       </div>
                     </div>
                     <span className="text-sm">
-                      {directionRoutePoints.routes[0].legs[0].duration.text}{" "}
+                      {
+                        /* @ts-ignore */
+                        directionRoutePoints.routes[0].legs[0].duration.text
+                      }{" "}
                       distance
                     </span>
                   </div>
@@ -295,6 +291,7 @@ export default function Rider() {
                   <span className="text-2xl font-bold">
                     {getPrice({
                       distance:
+                        /* @ts-ignore */
                         directionRoutePoints.routes[0].legs[0].distance.value,
                       minimumPrice: minimumPrice,
                       pricePerMeters: pricePerMeters,

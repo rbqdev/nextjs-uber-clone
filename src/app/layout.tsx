@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Inter as FontSans } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/shadcn/utils";
 import Script from "next/script";
 
-export const fontSans = FontSans({
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -24,7 +24,7 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased flex flex-col",
-          fontSans.variable
+          inter.variable
         )}
       >
         <header className="flex items-center justify-center min-h-[65px] border-b">
