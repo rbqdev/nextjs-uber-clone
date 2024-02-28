@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { $Enums, PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { serverSocketIo } from "@/server";
 
 const prisma = new PrismaClient();
 
@@ -22,6 +23,8 @@ export async function GET(req: NextRequest, res: NextResponse<User>) {
   const user = (await prisma.user.findUnique({
     where: { email },
   })) as User;
+
+  serverSocketIo.emit("user", user);
 
   return NextResponse.json(
     { data: user },

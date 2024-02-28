@@ -9,9 +9,9 @@ export default function Driver() {
     const socket = io();
     // Handle socket events on the client-side as needed
 
-    socket.emit("chupa", { payload: "teste" });
+    socket.emit("rider", { payload: "teste" });
 
-    socket.on("newRideFromRider", (payload) => {
+    socket.on("user", (payload) => {
       console.log("", { payload });
     });
 
