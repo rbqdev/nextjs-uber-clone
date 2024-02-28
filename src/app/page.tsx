@@ -1,5 +1,6 @@
 import { Button } from "@/lib/shadcn/components/ui/button";
 import { CarTaxiFrontIcon, User2Icon } from "lucide-react";
+import { useEffect } from "react";
 
 export default function Home() {
   return (

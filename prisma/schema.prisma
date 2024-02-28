@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+// Enums
+
+enum UserType {
+  RIDER
+  DRIVER
+}
+
+enum OrderStatus {
+  SEARCHING
+  ACCEPTED
+  ONBOARD
+  COMPLETED
+}
+
+// Models
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+  type UserType
+}
+
+model PriceConfigs {
+  id        Int     @id @default(autoincrement())
+  minimumPrice Int
+  pricePerMeters Int
+}
+
+model Order {
+  id        Int     @id @default(autoincrement())
+  userRiderId Int
+  userDriverId Int?
+  price String
+  distance Json
+  duration Json
+  source Json
+  destination Json
+  status OrderStatus
+}
