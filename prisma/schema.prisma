@@ -9,8 +9,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
@@ -21,7 +21,7 @@ enum UserType {
   DRIVER
 }
 
-enum OrderStatus {
+enum RideOrderStatus {
   SEARCHING
   ACCEPTED
   ONBOARD
@@ -31,26 +31,37 @@ enum OrderStatus {
 // Models
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  type UserType
+  id     Int      @id @default(autoincrement()) @map("id")
+  email  String   @unique
+  name   String
+  avatarUrl   String
+  type   UserType
+  driver Driver?
 }
 
-model PriceConfigs {
-  id        Int     @id @default(autoincrement())
-  minimumPrice Int
+model Driver {
+  id       Int    @id @default(autoincrement())
+  userId   Int    @unique
+  user     User   @relation(fields: [userId], references: [id])
+  carName  String
+  carColor String
+}
+
+model RidePrices {
+  id             Int @id @default(autoincrement())
+  minimumPrice   Int
   pricePerMeters Int
+  countryAlpha2 String
 }
 
-model Order {
-  id        Int     @id @default(autoincrement())
-  userRiderId Int
+model RideOrder {
+  id           Int         @id @default(autoincrement())
+  userRiderId  Int
   userDriverId Int?
-  price String
-  distance Json
-  duration Json
-  source Json
-  destination Json
-  status OrderStatus
+  price        String
+  distance     Json
+  duration     Json
+  source       Json
+  destination  Json
+  status       RideOrderStatus
 }

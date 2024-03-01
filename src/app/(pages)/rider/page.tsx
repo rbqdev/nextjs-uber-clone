@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Button } from "@/lib/shadcn/components/ui/button";
 import {
   Card,
@@ -11,7 +10,7 @@ import {
   CardTitle,
 } from "@/lib/shadcn/components/ui/card";
 import { ArrowRightIcon, ArrowRightToLineIcon, User2Icon } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import {
   GoogleMap,
@@ -22,10 +21,13 @@ import {
   OverlayViewF,
   DirectionsRenderer,
 } from "@react-google-maps/api";
-import SourceIconSvg from "@/assets/SourceIconSvg";
-import DestinationIconSvg from "@/assets/DestinationIconSvg";
-import { getPrice } from "./utils/getPrice";
+import SourceIconSvg from "@/assets/svg/SourceIconSvg";
+import DestinationIconSvg from "@/assets/svg/DestinationIconSvg";
+import { getRidePrice } from "./utils/getRidePrice";
 import { minimumPrice, pricePerMeters } from "./mocks";
+import { PageContext } from "../layout";
+import { createRideOrderMutation } from "./queries/mutations";
+import { RideOrderStatus, RideOrder } from "@prisma/client";
 
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY!;
 
@@ -43,16 +45,19 @@ type LocationSource = {
 
 export default function Rider() {
   const mapRef = useRef(null);
+  const { user } = useContext(PageContext);
   const [pickupValue, setPickupValue] = useState<LocationEvent>(null);
   const [destinationValue, setDestinationValue] = useState<LocationEvent>(null);
   const [source, setSource] = useState<LocationSource>(null);
   const [destination, setDestination] = useState<LocationSource>(null);
-
+  const [isSearchingDriver, setIsSearchingDriver] = useState(false);
+  const [currentRideOrder, setCurrentRideOrder] = useState<RideOrder | null>(
+    null
+  );
   const { isLoaded: isMapLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: API_KEY,
   });
-
   const [center, setCenter] = useState({
     lat: -15.793889,
     lng: -47.882778,
@@ -174,12 +179,12 @@ export default function Rider() {
     }
   }, [destination, source]);
 
-  const submitRideOrder = () => {
+  const submitRideOrder = async () => {
     // @ts-ignore
     const route = directionRoutePoints?.routes[0].legs[0];
     const body = {
-      userId: "userId",
-      price: getPrice({
+      userRiderId: user?.id,
+      price: getRidePrice({
         distance: route.distance.value,
         minimumPrice: minimumPrice,
         pricePerMeters: pricePerMeters,
@@ -189,186 +194,234 @@ export default function Rider() {
       source,
       destination,
     };
-    console.log({ body });
-    // mutation
+
+    const orderResponse = await createRideOrderMutation(body);
+
+    if (orderResponse && orderResponse.status === RideOrderStatus.SEARCHING) {
+      setIsSearchingDriver(true);
+    }
   };
+
+  const shouldShowLocationsStep = !isSearchingDriver && !currentRideOrder;
+  const shouldShowSearchingDriveStep = isSearchingDriver;
+  const shouldShowRideAcceptedStep = !isSearchingDriver && currentRideOrder;
 
   return (
     <div className="h-full flex gap-4">
       {/* get ride card */}
       <section className="flex flex-col gap-4">
-        <Card className="w-[400px]">
-          <CardHeader>
-            <CardTitle>Get a ride</CardTitle>
-            <CardDescription>Search where you want to go</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form>
-              <div className="grid w-full items-center gap-4">
-                <div className="relative border rounded-md">
-                  {/* <Disc2Icon className="absolute z-10 top-3 left-3 w-4 h-4" /> */}
-                  <SourceIconSvg />
-                  <GooglePlacesAutocomplete
-                    apiKey={API_KEY}
-                    selectProps={{
-                      value: pickupValue,
-                      onChange: (event) => getLatAndLnt(event, "source"),
-                      placeholder: "Enter pickup location",
-                      isClearable: true,
-                      components: {
-                        DropdownIndicator: null,
-                      },
-                      styles: {
-                        control: () => ({
-                          display: "flex",
-                          border: "none",
-                        }),
-                      },
-                    }}
-                  />
-                </div>
-                <div className="relative">
-                  {/* <DotSquareIcon className="absolute top-3 left-3 w-4 h-4" /> */}
-                  <DestinationIconSvg />
-                  <GooglePlacesAutocomplete
-                    apiKey={API_KEY}
-                    selectProps={{
-                      value: destinationValue,
-                      onChange: (event) => getLatAndLnt(event, "destination"),
-                      placeholder: "Where to?",
-                      isClearable: true,
-                      components: {
-                        DropdownIndicator: null,
-                      },
-                    }}
-                  />
-                </div>
-              </div>
-            </form>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button
-              className="w-full"
-              disabled={!source || !destination}
-              onClick={submitRideOrder}
-            >
-              Confirm locations
-            </Button>
-          </CardFooter>
-        </Card>
-
-        {directionRoutePoints && (
+        {/* First Card Steps */}
+        {shouldShowLocationsStep && (
           <>
-            <Card>
+            <Card className="min-w-[400px]">
               <CardHeader>
-                <CardTitle>Order Information</CardTitle>
+                <CardTitle>Get a ride</CardTitle>
+                <CardDescription>Pick the locations</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-1">
-                      {/* eslint-disable-next-line */}
-                      <img
-                        src="https://d1a3f4spazzrp4.cloudfront.net/car-types/haloProductImages/v1.1/Select_v1.png"
-                        alt="carImg"
-                        width={80}
-                        height={80}
-                      />
-                      <span className="text-2xl font-bold">GooberX</span>
-                      <div className="flex items-center text-xs">
-                        <User2Icon className="w-3 h-3" /> 4
+                <form>
+                  <div className="grid w-full items-center gap-2">
+                    <div className="relative border rounded-md z-20">
+                      <div className="absolute top-2.5 left-2 z-[1]">
+                        <SourceIconSvg />
                       </div>
+                      <GooglePlacesAutocomplete
+                        apiKey={API_KEY}
+                        selectProps={{
+                          value: pickupValue,
+                          onChange: (event) => getLatAndLnt(event, "source"),
+                          placeholder: "Enter pickup location",
+                          isClearable: true,
+                          components: {
+                            DropdownIndicator: null,
+                          },
+                          styles: {
+                            control: () => ({
+                              display: "flex",
+                              border: "none",
+                              background: "#f4f4f4",
+                              paddingLeft: "24px",
+                              borderRadius: "4px",
+                            }),
+                          },
+                        }}
+                      />
                     </div>
-                    <span className="text-sm">
-                      {
-                        /* @ts-ignore */
-                        directionRoutePoints.routes[0].legs[0].duration.text
-                      }{" "}
-                      distance
-                    </span>
+                    <div className="relative border rounded-md z-10">
+                      {/* <DotSquareIcon className="absolute top-3 left-3 w-4 h-4" /> */}
+                      <div className="absolute top-2.5 left-2 z-[1]">
+                        <DestinationIconSvg />
+                      </div>
+                      <GooglePlacesAutocomplete
+                        apiKey={API_KEY}
+                        selectProps={{
+                          value: destinationValue,
+                          onChange: (event) =>
+                            getLatAndLnt(event, "destination"),
+                          placeholder: "Where to?",
+                          isClearable: true,
+                          components: {
+                            DropdownIndicator: null,
+                          },
+                          styles: {
+                            control: () => ({
+                              display: "flex",
+                              border: "none",
+                              background: "#f4f4f4",
+                              paddingLeft: "24px",
+                              borderRadius: "4px",
+                            }),
+                          },
+                        }}
+                      />
+                    </div>
                   </div>
-
-                  <span className="text-2xl font-bold">
-                    {getPrice({
-                      distance:
-                        /* @ts-ignore */
-                        directionRoutePoints.routes[0].legs[0].distance.value,
-                      minimumPrice: minimumPrice,
-                      pricePerMeters: pricePerMeters,
-                    })}
-                  </span>
-                </div>
+                </form>
               </CardContent>
             </Card>
 
-            <div>
-              <Button onClick={submitRideOrder}>
-                To Ride <ArrowRightIcon />
-              </Button>
-            </div>
+            {directionRoutePoints && (
+              <Card className="min-w-[400px]">
+                <CardHeader>
+                  <CardTitle>Order Information</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="flex items-center gap-1">
+                        {/* eslint-disable-next-line */}
+                        <img
+                          src="https://d1a3f4spazzrp4.cloudfront.net/car-types/haloProductImages/v1.1/Select_v1.png"
+                          alt="carImg"
+                          width={80}
+                          height={80}
+                        />
+                        <div className="flex flex-col">
+                          <div className="flex items-center gap-2">
+                            <span className="text-2xl font-bold">GooberX</span>
+                            <div className="flex items-center text-xs">
+                              <User2Icon className="w-3 h-3" /> 4
+                            </div>
+                          </div>
+                          <span className="text-sm">
+                            {
+                              /* @ts-ignore */
+                              directionRoutePoints.routes[0].legs[0].duration
+                                .text
+                            }{" "}
+                            distance
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <span className="text-2xl font-bold">
+                      {getRidePrice({
+                        distance:
+                          /* @ts-ignore */
+                          directionRoutePoints.routes[0].legs[0].distance.value,
+                        minimumPrice: minimumPrice,
+                        pricePerMeters: pricePerMeters,
+                      })}
+                    </span>
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    className="w-full flex items-center gap-2"
+                    onClick={submitRideOrder}
+                  >
+                    Search a driver <ArrowRightIcon className="w-4 h-4" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            )}
+          </>
+        )}
+
+        {shouldShowSearchingDriveStep && (
+          <>
+            <Card className="min-w-[400px]">
+              <div>Searching for driver...</div>
+              <CardFooter>
+                <Button
+                  variant="secondary"
+                  className="w-full flex items-center gap-2 text-red-700 font-medium"
+                  onClick={() => {}}
+                >
+                  Cancel
+                </Button>
+              </CardFooter>
+            </Card>
+          </>
+        )}
+
+        {shouldShowRideAcceptedStep && (
+          <>
+            <Card className="min-w-[400px]">
+              <div>Driver accepted!!!</div>
+            </Card>
           </>
         )}
       </section>
 
       {/* map */}
-      <LoadScript googleMapsApiKey={API_KEY}>
-        <section className="flex-1 h-full bg-gray-200 rounded-md" ref={mapRef}>
-          {isMapLoaded && (
-            <GoogleMap
-              mapContainerStyle={{
-                width: "100%",
-                height: "100%",
-              }}
-              center={center}
-              zoom={16}
-              onLoad={onLoad}
-              onUnmount={onUnmount}
-              options={{ mapId: "9433ee85b1f142eb" }}
-            >
-              {/* Child components, such as markers, info windows, etc. */}
-              {source && (
-                <MarkerF position={{ lat: source?.lat!, lng: source?.lng! }}>
-                  <OverlayViewF
-                    position={{ lat: source?.lat!, lng: source?.lng! }}
-                    mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-                  >
-                    <div>
-                      <p>{source.label}</p>
-                    </div>
-                  </OverlayViewF>
-                </MarkerF>
-              )}
-              {destination && (
-                <MarkerF
-                  position={{ lat: destination?.lat!, lng: destination?.lng! }}
+      <section className="flex-1 h-full bg-gray-200 rounded-md" ref={mapRef}>
+        {isMapLoaded && (
+          <GoogleMap
+            mapContainerStyle={{
+              width: "100%",
+              height: "100%",
+            }}
+            center={center}
+            zoom={16}
+            onLoad={onLoad}
+            onUnmount={onUnmount}
+            options={{ mapId: "9433ee85b1f142eb" }}
+          >
+            {/* Child components, such as markers, info windows, etc. */}
+            {source && (
+              <MarkerF position={{ lat: source?.lat!, lng: source?.lng! }}>
+                <OverlayViewF
+                  position={{ lat: source?.lat!, lng: source?.lng! }}
+                  mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
                 >
-                  <OverlayViewF
-                    position={{
-                      lat: destination?.lat!,
-                      lng: destination?.lng!,
-                    }}
-                    mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-                  >
-                    <div>
-                      <p>{destination.label}</p>
-                    </div>
-                  </OverlayViewF>
-                </MarkerF>
-              )}
-
-              {directionRoutePoints && (
-                <DirectionsRenderer
-                  options={{
-                    polylineOptions: { strokeColor: "black", strokeWeight: 4 },
-                    suppressMarkers: true,
+                  <div>
+                    <p>{source.label}</p>
+                  </div>
+                </OverlayViewF>
+              </MarkerF>
+            )}
+            {destination && (
+              <MarkerF
+                position={{ lat: destination?.lat!, lng: destination?.lng! }}
+              >
+                <OverlayViewF
+                  position={{
+                    lat: destination?.lat!,
+                    lng: destination?.lng!,
                   }}
-                  directions={directionRoutePoints}
-                />
-              )}
-            </GoogleMap>
-          )}
-        </section>
-      </LoadScript>
+                  mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                >
+                  <div>
+                    <p>{destination.label}</p>
+                  </div>
+                </OverlayViewF>
+              </MarkerF>
+            )}
+
+            {directionRoutePoints && (
+              <DirectionsRenderer
+                options={{
+                  polylineOptions: { strokeColor: "black", strokeWeight: 4 },
+                  suppressMarkers: true,
+                }}
+                directions={directionRoutePoints}
+              />
+            )}
+          </GoogleMap>
+        )}
+      </section>
     </div>
   );
 }

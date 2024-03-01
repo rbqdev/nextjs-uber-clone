@@ -1,4 +1,4 @@
-export const getPrice = ({
+export const getRidePrice = ({
   distance,
   minimumPrice,
   pricePerMeters,
@@ -15,8 +15,6 @@ export const getPrice = ({
   } else {
     price = (minimumPrice + (pricePerMeters * distance - oneKM)) / 100;
   }
-
-  console.log({ price });
 
   return new Intl.NumberFormat("en-US", {
     style: "currency",

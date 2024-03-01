@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "ts-node ./src/app/db/seeds.ts && nodemon",
+    "dev": "ts-node ./src/configs/prisma/seeds.ts && nodemon",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -11,7 +11,9 @@
   "dependencies": {
     "@prisma/client": "^5.10.2",
     "@radix-ui/react-collapsible": "^1.0.3",
+    "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-progress": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@react-google-maps/api": "^2.19.3",
     "class-variance-authority": "^0.7.0",

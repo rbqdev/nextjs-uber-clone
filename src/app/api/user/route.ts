@@ -1,30 +1,27 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { $Enums, PrismaClient } from "@prisma/client";
+import { UserType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { serverSocketIo } from "@/server";
+import { prisma } from "@/configs/prisma";
 
-const prisma = new PrismaClient();
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.nextUrl);
+  const type = (searchParams.get("type") ?? "") as UserType;
 
-type User = {
-  id: number;
-  email: string;
-  name: string | null;
-  type: $Enums.UserType;
-};
-
-export async function GET(req: NextRequest, res: NextResponse<User>) {
-  if (!req.nextUrl.search.startsWith("?email=")) {
-    return NextResponse.json("Wrong param", {
+  if (!type) {
+    return NextResponse.json("Missing type param", {
       status: 401,
     });
   }
-  const { searchParams } = new URL(req.nextUrl);
-  const email = searchParams.get("email") ?? "";
-  const user = (await prisma.user.findUnique({
-    where: { email },
-  })) as User;
 
-  serverSocketIo.emit("user", user);
+  const user = await prisma.user.findFirst({
+    where: { type },
+  });
+
+  if (!user) {
+    return NextResponse.json("User not found", {
+      status: 400,
+    });
+  }
 
   return NextResponse.json(
     { data: user },
