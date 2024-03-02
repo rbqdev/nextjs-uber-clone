@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/shadcn/utils";
 import "./globals.css";
+import { Toaster } from "@/lib/shadcn/components/ui/toaster";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default async function RootLayout({
         )}
       >
         <main>{children}</main>
+        <Toaster />
       </body>
     </html>
   );

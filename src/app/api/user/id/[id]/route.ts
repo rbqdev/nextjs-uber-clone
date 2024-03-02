@@ -2,19 +2,19 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { UserType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/configs/prisma";
+import { NextContextProps } from "../../../sharedTypes";
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.nextUrl);
-  const type = (searchParams.get("type") ?? "") as UserType;
+export async function GET(req: NextRequest, context: NextContextProps) {
+  const id = Number(context.params.id);
 
-  if (!type) {
+  if (!id) {
     return NextResponse.json("Missing type param", {
       status: 401,
     });
   }
 
   const user = await prisma.user.findFirst({
-    where: { type },
+    where: { id },
   });
 
   if (!user) {

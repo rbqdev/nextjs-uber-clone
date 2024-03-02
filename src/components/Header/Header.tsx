@@ -1,7 +1,8 @@
+import { UserResponse } from "@/app/api/user/sharedTypes";
 import { User } from "@prisma/client";
 
 type HeaderProps = {
-  user: User | null;
+  user?: UserResponse;
 };
 
 export const Header = ({ user }: HeaderProps) => {

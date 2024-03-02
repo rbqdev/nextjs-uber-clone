@@ -2,13 +2,15 @@
 
 import { FullScreenLoader } from "@/components/FullScreenLoader/FullScreenLoader";
 import { Header } from "@/components/Header/Header";
-import { useGetUserByType } from "@/hooks/useGetUserByType";
+import { useDesktopNotification } from "@/hooks/useDesktopNotifications";
+import { useGetUser } from "@/hooks/useGetUser";
 import { User, UserType } from "@prisma/client";
 import { usePathname } from "next/navigation";
-import { createContext } from "react";
+import { createContext, useEffect } from "react";
+import { UserResponse } from "../api/user/sharedTypes";
 
 type PageContextProps = {
-  user: User | null;
+  user?: UserResponse;
 };
 
 export const PageContext = createContext({} as PageContextProps);
@@ -18,13 +20,18 @@ export default function DashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  Notification.requestPermission();
+  const { requestDesktopNotificationsPermission } = useDesktopNotification();
   const pathname = usePathname().replace("/", "");
   const userType = pathname === "driver" ? UserType.DRIVER : UserType.RIDER;
-  const { isLoading: isUserLoading, user } = useGetUserByType(userType);
+  const { isLoading: isUserLoading, user, getUserByType } = useGetUser();
+
+  useEffect(() => {
+    requestDesktopNotificationsPermission();
+    getUserByType(userType);
+  }, []);
 
   if (isUserLoading) {
-    return <FullScreenLoader isCompleted={!!user} />;
+    return <FullScreenLoader />;
   }
 
   return (

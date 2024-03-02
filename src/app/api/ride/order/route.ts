@@ -3,18 +3,21 @@ import { prisma } from "@/configs/prisma";
 import socketClient from "@/configs/socket/client";
 import { RideOrderStatus } from "@prisma/client";
 
+/* Create RideOrder */
 export async function POST(req: NextRequest) {
-  // req.json() === body on Nextj14
   const body = await req.json();
 
-  const order = await prisma.rideOrder.create({
+  const rideOrder = await prisma.rideOrder.create({
     data: {
       ...body,
       status: RideOrderStatus.SEARCHING,
     },
   });
+  const rideUser = await prisma.user.findFirst({
+    where: { id: rideOrder?.userRiderId },
+  });
 
-  if (!order) {
+  if (!rideOrder) {
     return NextResponse.json(
       { data: "Sometheing wrong!" },
       {
@@ -23,17 +26,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Get rider user
-  const user = await prisma.rideOrder.findFirst({
-    where: {
-      id: order.userRiderId,
-    },
-  });
-
-  socketClient.emit("toServer_newRideOrder");
-
   return NextResponse.json(
-    { data: order },
+    { data: { rideOrder, rideUser } },
     {
       status: 200,
     }
