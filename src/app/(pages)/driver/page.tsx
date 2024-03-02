@@ -82,7 +82,6 @@ export default function Driver() {
   };
 
   const handleCanceledRideByRider = () => {
-    console.log("Chegou aqui");
     setCurrentRideOrder(null);
     setNewRideOrderModalOpen(false);
     toast({

@@ -244,7 +244,6 @@ export default function Rider() {
   };
 
   const handleCancelRideOrder = async () => {
-    console.log({ currentRideOrder });
     setIsMutatingRideOrder(true);
 
     const body = {
@@ -299,8 +298,6 @@ export default function Rider() {
       handleRideAccepted();
     });
   }, []);
-
-  console.log({ currentRideOrderFlowStep });
 
   return (
     <div className="h-full flex gap-4">

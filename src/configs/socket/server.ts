@@ -33,7 +33,6 @@ export const socketInit = (server: any) => {
       io.emit("toDriver_newRideOrder", payload);
     });
     socket.on("toDriver_rideCanceled", (payload: Payload) => {
-      console.log("Chegou no server");
       io.emit("toDriver_rideCanceled", payload);
     });
   });

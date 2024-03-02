@@ -14,22 +14,22 @@ export const useDesktopNotification = () => {
       typeof Notification !== undefined &&
       Notification.permission === "granted"
     ) {
-      // document.addEventListener("visibilitychange", () => {
-      //   if (document.hidden) {
-      //     const notification = new Notification("Goober", {
-      //       body: description,
-      //     });
-      //     notification.addEventListener("click", (event) => {
-      //       window.parent.parent.focus();
-      //     });
-      //     if (document.visibilityState === "visible") {
-      //       notification.close();
-      //     }
-      //     setTimeout(() => {
-      //       notification.close();
-      //     }, 4000);
-      //   }
-      // });
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          const notification = new Notification("Goober", {
+            body: description,
+          });
+          notification.addEventListener("click", (event) => {
+            window.parent.parent.focus();
+          });
+          if (document.visibilityState === "visible") {
+            notification.close();
+          }
+          setTimeout(() => {
+            notification.close();
+          }, 4000);
+        }
+      });
     }
   };
 
