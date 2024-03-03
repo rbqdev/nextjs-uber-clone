@@ -1,9 +1,9 @@
 import {
-  GoogleDirectionsRoute,
   LocationEvent,
   LocationEventDetailed,
 } from "@/app/(pages)/rider/sharedTypes";
 import { googleApiKey } from "@/constants";
+import { GoogleMapsDirectionsRoute } from "@/sharedTypes";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { useCallback, useState } from "react";
 
@@ -21,7 +21,7 @@ export const useMap = () => {
   const [locationDestination, setLocationDestination] =
     useState<LocationEventDetailed>(null);
   const [directionRoutePoints, setDirectionRoutePoints] =
-    useState<GoogleDirectionsRoute>(null);
+    useState<GoogleMapsDirectionsRoute>(null);
   const [isUpdatingDirectionRoutePoints, setIsUpdatingDirectionRoutePoints] =
     useState(false);
 

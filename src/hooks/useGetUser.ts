@@ -1,9 +1,9 @@
 "use client";
 
 import { getUser } from "@/app/api/user/queries";
-import { User } from "@/app/api/user/sharedTypes";
-import { baseUrl } from "@/constants";
+import { User } from "@/sharedTypes";
 import { UserType } from "@prisma/client";
+import { baseUrl } from "@/constants";
 import { useState } from "react";
 
 export const useGetUser = () => {
@@ -12,20 +12,20 @@ export const useGetUser = () => {
 
   const _getUser = async (url: string) => {
     setIsLoading(true);
-    const User = await getUser(url);
+    const user = await getUser(url);
     setIsLoading(false);
-    setUser(User);
-    return User;
+    setUser(user);
+    return user;
   };
 
   const getUserById = async (id: number) => {
     const user = await _getUser(`${baseUrl}/api/user/id/${id}`);
-    return user;
+    return user as User;
   };
 
   const getUserByType = async (type: UserType) => {
     const user = await _getUser(`${baseUrl}/api/user/type/${type}`);
-    return user;
+    return user as User;
   };
 
   return {

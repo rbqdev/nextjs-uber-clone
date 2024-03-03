@@ -7,7 +7,8 @@ import { useGetUser } from "@/hooks/useGetUser";
 import { UserType } from "@prisma/client";
 import { usePathname } from "next/navigation";
 import { createContext, useEffect } from "react";
-import { User } from "../api/user/sharedTypes";
+import { User } from "@/sharedTypes";
+import { Toaster } from "@/lib/shadcn/components/ui/toaster";
 
 type PageContextProps = {
   user?: User;
@@ -40,6 +41,7 @@ export default function DashboardLayout({
       <div className="w-full h-screen max-w-[1400px] py-6 px-6">
         <PageContext.Provider value={{ user }}>{children}</PageContext.Provider>
       </div>
+      <Toaster />
     </div>
   );
 }

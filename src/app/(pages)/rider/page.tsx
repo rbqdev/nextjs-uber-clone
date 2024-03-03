@@ -8,23 +8,19 @@ import { PageContext } from "../layout";
 import {
   createRideRequestMutation,
   updateRideRequestMutation,
-} from "@/app/api/ride/order/mutations";
-import { RideRequestStatus, RideRequest, UserType } from "@prisma/client";
+} from "@/app/api/ride/request/mutations";
+import { RideRequestStatus, UserType } from "@prisma/client";
 import socketClient from "@/configs/socket/client";
 import { useGetUser } from "@/hooks/useGetUser";
-import { User } from "@/app/api/user/sharedTypes";
-import {
-  GoogleDirectionsRoute,
-  LocationEvent,
-  LocationEventDetailed,
-  RideRequestFlowSteps,
-} from "./sharedTypes";
-import { googleApiKey } from "@/constants";
+import { User } from "@/sharedTypes";
+import { RideRequestFlowSteps } from "./sharedTypes";
 import { RideRequestInitialStep } from "./components/rideRequestInitialStep";
 import { RideRequestSearchingDriverStep } from "./components/rideRequestSearchingDriverStep";
 import { RideRequestAcceptedStep } from "./components/rideRequestAcceptedStep";
 import { Map } from "@/components/map";
 import { useMap } from "@/hooks/useMap";
+import { useCountup } from "@/hooks/useCountup";
+import { RideRequest } from "@/sharedTypes";
 
 export default function Rider() {
   const { user } = useContext(PageContext);
@@ -46,6 +42,15 @@ export default function Rider() {
     useState<RideRequest | null>(null);
   const [currentDriver, setCurrentDriver] = useState<User>(undefined);
   const [isRideRequestLoading, setIsRideRequestLoading] = useState(false);
+  const {
+    time: { minutes, seconds },
+    isTimeup,
+    setIsTimeup,
+    incrementCountup,
+  } = useCountup({
+    maxMinutes: 0,
+    maxSeconds: 30, // Stop search after 30 seconds
+  });
 
   const handleSubmitRideRequest = async () => {
     setIsRideRequestLoading(true);
@@ -74,7 +79,6 @@ export default function Rider() {
 
   const handleCancelRideRequest = async () => {
     setIsRideRequestLoading(true);
-
     const body = {
       status: RideRequestStatus.CANCELED,
     };
@@ -82,11 +86,7 @@ export default function Rider() {
       currentRideRequest?.id!,
       body
     );
-
-    if (
-      updatedRideRequest &&
-      updatedRideRequest.status === RideRequestStatus.CANCELED
-    ) {
+    if (updatedRideRequest) {
       setCurrentRideRequest(null);
       setIsRideRequestLoading(false);
       setCurrentRideRequestFlowStep(RideRequestFlowSteps.INITIAL);
@@ -99,6 +99,7 @@ export default function Rider() {
       return;
     }
 
+    /** Need to be setted with previous value because this function is inside of socket scope */
     let updatedRideRequest = {} as RideRequest;
     setCurrentRideRequest((prevValue) => {
       updatedRideRequest = {
@@ -109,9 +110,11 @@ export default function Rider() {
     });
 
     const driverUser = await getUserByType(UserType.DRIVER);
-    setCurrentDriver(driverUser);
-    setCurrentRideRequest(updatedRideRequest);
-    setCurrentRideRequestFlowStep(RideRequestFlowSteps.ACCEPTED);
+    if (driverUser) {
+      setCurrentDriver(driverUser);
+      setCurrentRideRequest(updatedRideRequest);
+      setCurrentRideRequestFlowStep(RideRequestFlowSteps.ACCEPTED);
+    }
   }, [currentDriver, getUserByType]);
 
   useEffect(() => {
@@ -119,6 +122,18 @@ export default function Rider() {
       handleRideAccepted();
     });
   }, []);
+
+  useEffect(() => {
+    // Handle timeup when is searching driver
+    if (
+      currentRideRequestFlowStep === RideRequestFlowSteps.SEARCHING_DRIVER &&
+      isTimeup
+    ) {
+      setCurrentRideRequestFlowStep(RideRequestFlowSteps.INITIAL);
+      setIsTimeup(false);
+      socketClient.emit("toDriver_rideCanceled");
+    }
+  }, [currentRideRequestFlowStep, isTimeup, setIsTimeup]);
 
   return (
     <div className="h-full flex gap-4">
@@ -140,7 +155,11 @@ export default function Rider() {
           RideRequestFlowSteps.SEARCHING_DRIVER && (
           <RideRequestSearchingDriverStep
             isLoading={isRideRequestLoading}
+            minutes={minutes}
+            seconds={seconds}
+            isTimeup={isTimeup}
             onCancelRideRequest={handleCancelRideRequest}
+            onIncrementCountup={incrementCountup}
           />
         )}
 
@@ -155,7 +174,6 @@ export default function Rider() {
         )}
       </section>
 
-      {/* map */}
       <section className="flex-1 h-full bg-zinc-200 rounded-md">
         <Map
           isMapLoaded={isGoogleMapsLoaded}

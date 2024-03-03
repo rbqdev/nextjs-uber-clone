@@ -1,19 +1,22 @@
 "use client";
 
+import { LocationEventDetailed } from "@/app/(pages)/rider/sharedTypes";
+import { GoogleMaps, GoogleMapsDirectionsRoute } from "@/sharedTypes";
 import {
   GoogleMap,
-  MarkerF,
   OverlayView,
   OverlayViewF,
   DirectionsRenderer,
+  MarkerF,
 } from "@react-google-maps/api";
 import { useEffect, useState } from "react";
 
 type MapProps = {
   isMapLoaded: boolean;
-  locationSource: any;
-  locationDestination: any;
-  directionRoutePoints: any;
+  locationSource: LocationEventDetailed;
+  locationDestination: LocationEventDetailed;
+  directionRoutePoints: GoogleMapsDirectionsRoute;
+  shouldShowDriverPin?: boolean;
   onSetDirectionRoute: () => void;
 };
 
@@ -22,6 +25,7 @@ export const Map = ({
   locationSource,
   locationDestination,
   directionRoutePoints,
+  shouldShowDriverPin,
   onSetDirectionRoute,
 }: MapProps) => {
   // TODO: ask/set current user location
@@ -29,7 +33,7 @@ export const Map = ({
     lat: -15.793889,
     lng: -47.882778,
   });
-  const [map, setMap] = useState(null);
+  const [map, setMap] = useState<GoogleMaps>(null);
 
   const onLoadMap = (map: any) => {
     setMap(map);
@@ -40,7 +44,6 @@ export const Map = ({
 
   useEffect(() => {
     if (locationSource) {
-      // @ts-ignore
       map?.panTo({
         lat: locationSource.lat,
         lng: locationSource.lng,
@@ -57,7 +60,6 @@ export const Map = ({
   }, [locationDestination, map, onSetDirectionRoute, locationSource]);
 
   useEffect(() => {
-    // Initial map load
     if (locationDestination) {
       setCenter({
         lat: locationDestination.lat,
@@ -87,9 +89,9 @@ export const Map = ({
       onUnmount={onUnmountMap}
       options={{ mapId: "9433ee85b1f142eb" }}
     >
-      {/* Child components, such as markers, info windows, etc. */}
       {locationSource && (
         <MarkerF
+          icon={shouldShowDriverPin ? "/assets/location-pin.png" : undefined}
           position={{
             lat: locationSource?.lat!,
             lng: locationSource?.lng!,
@@ -102,7 +104,7 @@ export const Map = ({
             }}
             mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
           >
-            <div>
+            <div className="px-2 py-2 bg-white text-black font-bold">
               <p>{locationSource.label}</p>
             </div>
           </OverlayViewF>
@@ -122,7 +124,7 @@ export const Map = ({
             }}
             mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
           >
-            <div>
+            <div className="px-2 py-2 bg-white text-black font-bold">
               <p>{locationDestination.label}</p>
             </div>
           </OverlayViewF>

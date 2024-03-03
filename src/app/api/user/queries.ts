@@ -1,4 +1,4 @@
-import { User } from "./sharedTypes";
+import { User } from "@/sharedTypes";
 
 export const getUser = async (url: string) => {
   try {

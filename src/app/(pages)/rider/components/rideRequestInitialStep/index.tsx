@@ -7,15 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/lib/shadcn/components/ui/card";
-import { GoogleDirectionsRoute, LocationEvent } from "../../sharedTypes";
+import { LocationEvent } from "../../sharedTypes";
 import { GooglePlacesAutocompleteInput } from "./googlePlacesAutocomplete";
 import { OrderInformationCard } from "./informationCard";
+import { GoogleMapsDirectionsRoute } from "@/sharedTypes";
 
 type RideRequestInitialStepProps = {
   isGoogleMapsLoaded: boolean;
   sourceAutocompleteValue: any;
   destinationAutocompleteValue: any;
-  directionRoutePoints: GoogleDirectionsRoute;
+  directionRoutePoints: GoogleMapsDirectionsRoute;
   isUpdatingDirectionRoutePoints: boolean;
   isSubmitingRequest: boolean;
   onChangeLocationCords: (event: LocationEvent, type: string) => void;

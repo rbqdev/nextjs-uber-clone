@@ -14,7 +14,11 @@ export async function GET(req: NextRequest, context: NextContextProps) {
   }
 
   const user = await prisma.user.findFirst({
+    relationLoadStrategy: "join",
     where: { id },
+    include: {
+      driver: true,
+    },
   });
 
   if (!user) {

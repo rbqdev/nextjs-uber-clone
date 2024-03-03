@@ -1,10 +1,11 @@
 import { baseUrl } from "@/constants";
-import { RideRequest, RideRequestStatus, User } from "@prisma/client";
+import { RideRequest } from "@/sharedTypes";
+import { User } from "@prisma/client";
 import { Optional } from "@prisma/client/runtime/library";
 
 export const createRideRequestMutation = async (body: Record<string, any>) => {
   try {
-    const response = await fetch(`${baseUrl}/api/ride/order`, {
+    const response = await fetch(`${baseUrl}/api/ride/request`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -14,16 +15,16 @@ export const createRideRequestMutation = async (body: Record<string, any>) => {
     const { data } = await response.json();
     return data as { rideRequest: RideRequest; rideUser: User };
   } catch (error) {
-    throw new Error("Something wrong with create ride order");
+    throw new Error("Something wrong with create ride request");
   }
 };
 
 export const updateRideRequestMutation = async (
-  orderId: number,
+  id: number,
   body: Record<string, Optional<RideRequest>>
 ) => {
   try {
-    const response = await fetch(`${baseUrl}/api/ride/order/${orderId}`, {
+    const response = await fetch(`${baseUrl}/api/ride/request/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -33,6 +34,6 @@ export const updateRideRequestMutation = async (
     const { data } = await response.json();
     return data as { rideRequest: RideRequest; rideUser: User };
   } catch (error) {
-    throw new Error("Something wrong with update ride order");
+    throw new Error("Something wrong with update ride request");
   }
 };

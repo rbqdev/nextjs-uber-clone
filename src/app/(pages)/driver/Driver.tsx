@@ -1,5 +1,4 @@
 "use client";
-
 import socketClient from "@/configs/socket/client";
 import { Button } from "@/lib/shadcn/components/ui/button";
 import {
@@ -9,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/lib/shadcn/components/ui/dialog";
-import { LoaderIcon, UserIcon } from "lucide-react";
+import { LoaderIcon } from "lucide-react";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { PageContext } from "../layout";
 import { RideRequestStatus, User } from "@prisma/client";

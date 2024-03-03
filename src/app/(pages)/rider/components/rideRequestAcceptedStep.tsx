@@ -9,8 +9,7 @@ import {
 import { DotIcon, LoaderIcon, StarIcon } from "lucide-react";
 import SourceIconSvg from "@/assets/svg/SourceIconSvg";
 import DestinationIconSvg from "@/assets/svg/DestinationIconSvg";
-import { User } from "@/app/api/user/sharedTypes";
-import { RideRequest } from "@prisma/client";
+import { User, RideRequest } from "@/sharedTypes";
 
 type RideRequestAcceptedStepProps = {
   currentDriver: User;

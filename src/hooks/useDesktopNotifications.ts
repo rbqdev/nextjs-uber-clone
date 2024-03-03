@@ -15,19 +15,19 @@ export const useDesktopNotification = () => {
       Notification.permission === "granted" &&
       Notification.length === 0
     ) {
-      if (document.hidden) {
-        const notification = new Notification("Goober", {
-          body: description,
-        });
+      const notification = new Notification("Goober", {
+        body: description,
+      });
+      if (document.visibilityState === "hidden") {
         notification.addEventListener("click", (event) => {
           window.parent.parent.focus();
         });
-        if (document.visibilityState === "visible") {
-          notification.close();
-        }
         setTimeout(() => {
           notification.close();
         }, 4000);
+      }
+      if (document.visibilityState === "visible") {
+        notification.close();
       }
     }
   };

@@ -17,5 +17,3 @@ export enum RideRequestFlowSteps {
   ONGOING = "ONGOING",
   FINISHED = "FINISHED",
 }
-
-export type GoogleDirectionsRoute = google.maps.DirectionsResult | null;

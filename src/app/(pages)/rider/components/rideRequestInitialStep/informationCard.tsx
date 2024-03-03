@@ -12,13 +12,13 @@ import { getRidePrice } from "../../utils/getRidePrice";
 import { minimumPrice, pricePerMeters } from "../../mocks";
 import { ArrowRightIcon, LoaderIcon, User2Icon } from "lucide-react";
 import { Button } from "@/lib/shadcn/components/ui/button";
-import { GoogleDirectionsRoute, LocationEvent } from "../../sharedTypes";
+import { GoogleMapsDirectionsRoute, LocationEvent } from "../../sharedTypes";
 import { GooglePlacesAutocompleteInput } from "./googlePlacesAutocomplete";
 
 type OrderInformationCardProps = {
   isLoading: boolean;
   isSubmiting: boolean;
-  directionRoutePoints: GoogleDirectionsRoute;
+  directionRoutePoints: GoogleMapsDirectionsRoute;
   onSubmitRideRequest: () => void;
 };
 
