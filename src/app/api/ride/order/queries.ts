@@ -1,11 +1,11 @@
 import { baseUrl } from "@/constants";
-import { RideOrder, User } from "@prisma/client";
+import { RideRequest, User } from "@prisma/client";
 
-export const getRideOrder = async (id: number) => {
+export const getRideRequest = async (id: number) => {
   try {
     const response = await fetch(`${baseUrl}/api/ride/order/${id}`);
     const { data } = await response.json();
-    return data as { rideOrder: RideOrder; rideUser: User };
+    return data as { rideRequest: RideRequest; rideUser: User };
   } catch (error) {
     throw new Error("Something wrong");
   }

@@ -2,7 +2,7 @@ const { prisma } = require("./index");
 
 async function main() {
   // Delete all data first
-  await prisma.rideOrder.deleteMany();
+  await prisma.rideRequest.deleteMany();
   await prisma.driver.deleteMany();
   await prisma.user.deleteMany();
   await prisma.user.createMany({

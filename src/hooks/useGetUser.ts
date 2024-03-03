@@ -1,30 +1,31 @@
 "use client";
 
 import { getUser } from "@/app/api/user/queries";
-import { UserResponse } from "@/app/api/user/sharedTypes";
+import { User } from "@/app/api/user/sharedTypes";
 import { baseUrl } from "@/constants";
-import { User, UserType } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { UserType } from "@prisma/client";
+import { useState } from "react";
 
 export const useGetUser = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<UserResponse | undefined>(undefined);
+  const [user, setUser] = useState<User>(undefined);
+
+  const _getUser = async (url: string) => {
+    setIsLoading(true);
+    const User = await getUser(url);
+    setIsLoading(false);
+    setUser(User);
+    return User;
+  };
 
   const getUserById = async (id: number) => {
-    setIsLoading(true);
-    const userResponse = await getUser(`${baseUrl}/api/user/id/${id}`);
-    setIsLoading(false);
-    setUser(userResponse);
-
-    return userResponse;
+    const user = await _getUser(`${baseUrl}/api/user/id/${id}`);
+    return user;
   };
 
   const getUserByType = async (type: UserType) => {
-    setIsLoading(true);
-    const userResponse = await getUser(`${baseUrl}/api/user/type/${type}`);
-    setIsLoading(false);
-    setUser(userResponse);
-    return userResponse;
+    const user = await _getUser(`${baseUrl}/api/user/type/${type}`);
+    return user;
   };
 
   return {

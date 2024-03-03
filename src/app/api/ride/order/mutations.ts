@@ -1,8 +1,8 @@
 import { baseUrl } from "@/constants";
-import { RideOrder, RideOrderStatus, User } from "@prisma/client";
+import { RideRequest, RideRequestStatus, User } from "@prisma/client";
 import { Optional } from "@prisma/client/runtime/library";
 
-export const createRideOrderMutation = async (body: Record<string, any>) => {
+export const createRideRequestMutation = async (body: Record<string, any>) => {
   try {
     const response = await fetch(`${baseUrl}/api/ride/order`, {
       method: "POST",
@@ -12,15 +12,15 @@ export const createRideOrderMutation = async (body: Record<string, any>) => {
       body: JSON.stringify(body),
     });
     const { data } = await response.json();
-    return data as { rideOrder: RideOrder; rideUser: User };
+    return data as { rideRequest: RideRequest; rideUser: User };
   } catch (error) {
     throw new Error("Something wrong with create ride order");
   }
 };
 
-export const updateRideOrderMutation = async (
+export const updateRideRequestMutation = async (
   orderId: number,
-  body: Record<string, Optional<RideOrder>>
+  body: Record<string, Optional<RideRequest>>
 ) => {
   try {
     const response = await fetch(`${baseUrl}/api/ride/order/${orderId}`, {
@@ -31,7 +31,7 @@ export const updateRideOrderMutation = async (
       body: JSON.stringify(body),
     });
     const { data } = await response.json();
-    return data as { rideOrder: RideOrder; rideUser: User };
+    return data as { rideRequest: RideRequest; rideUser: User };
   } catch (error) {
     throw new Error("Something wrong with update ride order");
   }

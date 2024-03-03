@@ -1,16 +1,16 @@
 "use client";
 
-import { FullScreenLoader } from "@/components/FullScreenLoader/FullScreenLoader";
-import { Header } from "@/components/Header/Header";
+import { FullScreenLoader } from "@/components/fullScreenLoader";
+import { Header } from "@/components/header";
 import { useDesktopNotification } from "@/hooks/useDesktopNotifications";
 import { useGetUser } from "@/hooks/useGetUser";
-import { User, UserType } from "@prisma/client";
+import { UserType } from "@prisma/client";
 import { usePathname } from "next/navigation";
 import { createContext, useEffect } from "react";
-import { UserResponse } from "../api/user/sharedTypes";
+import { User } from "../api/user/sharedTypes";
 
 type PageContextProps = {
-  user?: UserResponse;
+  user?: User;
 };
 
 export const PageContext = createContext({} as PageContextProps);

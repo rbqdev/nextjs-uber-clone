@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon",
-    "seed": "ts-node ./src/configs/prisma/seeds.ts",
+    "seeds:generate": "ts-node ./src/configs/prisma/seeds.ts",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

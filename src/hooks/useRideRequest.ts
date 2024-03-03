@@ -1,23 +1,23 @@
 "use client";
 
 import { baseUrl } from "@/constants";
-import { updateRideOrderMutation } from "@/app/api/ride/order/mutations";
-import { RideOrder, RideOrderStatus, User, UserType } from "@prisma/client";
+import { updateRideRequestMutation } from "@/app/api/ride/order/mutations";
+import { RideRequest, RideRequestStatus, User, UserType } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { Optional } from "@prisma/client/runtime/library";
 
-export const useRideOrder = () => {
+export const useRideRequest = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const updateRideOrder = async ({
+  const updateRideRequest = async ({
     orderId,
     body,
   }: {
     orderId: number;
-    body: Record<string, Optional<RideOrder>>;
+    body: Record<string, Optional<RideRequest>>;
   }) => {
     setIsLoading(true);
-    const orderResponse = await updateRideOrderMutation(orderId, body);
+    const orderResponse = await updateRideRequestMutation(orderId, body);
     setIsLoading(false);
 
     return orderResponse;
@@ -25,6 +25,6 @@ export const useRideOrder = () => {
 
   return {
     isLoading,
-    updateRideOrder,
+    updateRideRequest,
   };
 };

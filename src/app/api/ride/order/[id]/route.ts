@@ -12,21 +12,21 @@ export async function GET(req: NextRequest, context: NextContextProps) {
     });
   }
 
-  const rideOrder = await prisma.rideOrder.findFirst({
+  const rideRequest = await prisma.rideRequest.findFirst({
     where: { id },
   });
   const rideUser = await prisma.user.findFirst({
-    where: { id: rideOrder?.userRiderId },
+    where: { id: rideRequest?.riderId },
   });
 
-  if (!rideOrder) {
+  if (!rideRequest) {
     return NextResponse.json("User not found", {
       status: 400,
     });
   }
 
   return NextResponse.json(
-    { data: { rideOrder, rideUser } },
+    { data: { rideRequest, rideUser } },
     {
       status: 200,
     }
@@ -36,17 +36,17 @@ export async function GET(req: NextRequest, context: NextContextProps) {
 export async function PUT(req: NextRequest, context: NextContextProps) {
   const body = await req.json();
 
-  const rideOrder = await prisma.rideOrder.update({
+  const rideRequest = await prisma.rideRequest.update({
     where: {
       id: Number(context.params.id),
     },
     data: body,
   });
   const rideUser = await prisma.user.findFirst({
-    where: { id: rideOrder?.userRiderId },
+    where: { id: rideRequest?.riderId },
   });
 
-  if (!rideOrder) {
+  if (!rideRequest) {
     return NextResponse.json(
       { data: "Sometheing wrong!" },
       {
@@ -56,7 +56,7 @@ export async function PUT(req: NextRequest, context: NextContextProps) {
   }
 
   return NextResponse.json(
-    { data: { rideOrder, rideUser } },
+    { data: { rideRequest, rideUser } },
     {
       status: 200,
     }

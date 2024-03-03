@@ -1,23 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/configs/prisma";
 import socketClient from "@/configs/socket/client";
-import { RideOrderStatus } from "@prisma/client";
+import { RideRequestStatus } from "@prisma/client";
 
-/* Create RideOrder */
+/* Create RideRequest */
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
-  const rideOrder = await prisma.rideOrder.create({
+  const rideRequest = await prisma.rideRequest.create({
     data: {
       ...body,
-      status: RideOrderStatus.SEARCHING,
+      status: RideRequestStatus.SEARCHING,
     },
   });
   const rideUser = await prisma.user.findFirst({
-    where: { id: rideOrder?.userRiderId },
+    where: { id: rideRequest?.riderId },
   });
 
-  if (!rideOrder) {
+  if (!rideRequest) {
     return NextResponse.json(
       { data: "Sometheing wrong!" },
       {
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json(
-    { data: { rideOrder, rideUser } },
+    { data: { rideRequest, rideUser } },
     {
       status: 200,
     }

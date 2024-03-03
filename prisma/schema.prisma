@@ -22,10 +22,10 @@ enum UserType {
   DRIVER
 }
 
-enum RideOrderStatus {
+enum RideRequestStatus {
   SEARCHING // DEFAULT
   ACCEPTED
-  ONBOARD
+  ONGOING
   COMPLETED
   CANCELED
 }
@@ -53,17 +53,17 @@ model RidePrices {
   id             Int @id @default(autoincrement())
   minimumPrice   Int
   pricePerMeters Int
+  driverPercentage Int
   countryAlpha2 String
 }
-
-model RideOrder {
+model RideRequest {
   id           Int         @id @default(autoincrement())
-  userRiderId  Int
-  userDriverId Int?
+  riderId  Int
+  driverId Int?
   price        String
   distance     Json
   duration     Json
   source       Json
   destination  Json
-  status       RideOrderStatus
+  status       RideRequestStatus
 }

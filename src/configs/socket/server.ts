@@ -29,8 +29,8 @@ export const socketInit = (server: any) => {
     });
 
     /** Driver events */
-    socket.on("toDriver_newRideOrder", (payload: Payload) => {
-      io.emit("toDriver_newRideOrder", payload);
+    socket.on("toDriver_newRideRequest", (payload: Payload) => {
+      io.emit("toDriver_newRideRequest", payload);
     });
     socket.on("toDriver_rideCanceled", (payload: Payload) => {
       io.emit("toDriver_rideCanceled", payload);

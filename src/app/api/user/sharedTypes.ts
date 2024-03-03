@@ -1,3 +1,3 @@
-import { Driver, User } from "@prisma/client";
+import { Driver, User as PrismaUser } from "@prisma/client";
 
-export type UserResponse = User & { driver?: Driver };
+export type User = (PrismaUser & { driver?: Driver }) | undefined;
