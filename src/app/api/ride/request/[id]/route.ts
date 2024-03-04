@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/configs/prisma";
-import socketClient from "@/configs/socket/client";
 import { NextContextProps } from "../../../sharedTypes";
 
 export async function GET(req: NextRequest, context: NextContextProps) {

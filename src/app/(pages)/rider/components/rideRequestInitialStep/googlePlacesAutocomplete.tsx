@@ -1,7 +1,7 @@
 import { googleApiKey } from "@/constants";
 import { Skeleton } from "@/lib/shadcn/components/ui/skeleton";
+import { LocationEvent } from "@/sharedTypes";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
-import { LocationEvent } from "../../sharedTypes";
 
 type GooglePlacesAutocompleteInputProps = {
   isGoogleMapsLoaded: boolean;

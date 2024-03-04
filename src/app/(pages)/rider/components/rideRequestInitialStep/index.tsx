@@ -7,10 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/lib/shadcn/components/ui/card";
-import { LocationEvent } from "../../sharedTypes";
 import { GooglePlacesAutocompleteInput } from "./googlePlacesAutocomplete";
 import { OrderInformationCard } from "./informationCard";
-import { GoogleMapsDirectionsRoute } from "@/sharedTypes";
+import { GoogleMapsDirectionsRoute, LocationEvent } from "@/sharedTypes";
 
 type RideRequestInitialStepProps = {
   isGoogleMapsLoaded: boolean;
@@ -19,6 +18,7 @@ type RideRequestInitialStepProps = {
   directionRoutePoints: GoogleMapsDirectionsRoute;
   isUpdatingDirectionRoutePoints: boolean;
   isSubmitingRequest: boolean;
+  currentRideAmount: string;
   onChangeLocationCords: (event: LocationEvent, type: string) => void;
   onSubmitRideRequest: () => void;
 };
@@ -30,6 +30,7 @@ export const RideRequestInitialStep = ({
   directionRoutePoints,
   isUpdatingDirectionRoutePoints,
   isSubmitingRequest,
+  currentRideAmount,
   onChangeLocationCords,
   onSubmitRideRequest,
 }: RideRequestInitialStepProps) => {
@@ -73,6 +74,7 @@ export const RideRequestInitialStep = ({
           directionRoutePoints={directionRoutePoints}
           isLoading={isUpdatingDirectionRoutePoints}
           isSubmiting={isSubmitingRequest}
+          currentRideAmount={currentRideAmount}
           onSubmitRideRequest={onSubmitRideRequest}
         />
       )}

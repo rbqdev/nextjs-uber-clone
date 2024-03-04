@@ -1,9 +1,9 @@
+import { googleApiKey } from "@/constants";
 import {
+  GoogleMapsDirectionsRoute,
   LocationEvent,
   LocationEventDetailed,
-} from "@/app/(pages)/rider/sharedTypes";
-import { googleApiKey } from "@/constants";
-import { GoogleMapsDirectionsRoute } from "@/sharedTypes";
+} from "@/sharedTypes";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { useCallback, useState } from "react";
 

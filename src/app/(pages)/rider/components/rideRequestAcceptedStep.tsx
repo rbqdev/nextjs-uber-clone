@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/lib/shadcn/components/ui/card";
-import { DotIcon, LoaderIcon, MapIcon, StarIcon } from "lucide-react";
+import { DotIcon, LoaderIcon, StarIcon } from "lucide-react";
 import SourceIconSvg from "@/assets/svg/SourceIconSvg";
 import DestinationIconSvg from "@/assets/svg/DestinationIconSvg";
 import { User, RideRequest } from "@/sharedTypes";

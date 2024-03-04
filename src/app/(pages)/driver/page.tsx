@@ -8,24 +8,20 @@ import { useDesktopNotification } from "@/hooks/useDesktopNotifications";
 import { getRideRequest } from "@/app/api/ride/request/queries";
 import { useToast } from "@/lib/shadcn/components/ui/use-toast";
 import { useRideRequest } from "@/hooks/useRideRequest";
-import { RideRequest } from "@/sharedTypes";
+import { LocationEventDetailed, RideRequest } from "@/sharedTypes";
 import { useMap } from "@/hooks/useMap";
 import { Map } from "@/components/map";
 import { RideRequestCard } from "./components/rideRequestCard";
 import { EmptyCard } from "./components/emptyCard";
-import { LocationEventDetailed } from "../rider/sharedTypes";
 
 export default function Driver() {
   const {
     locationSource,
     locationDestination,
-    sourceAutocompleteValue,
-    destinationAutocompleteValue,
     directionRoutePoints,
     isGoogleMapsLoaded,
     setLocationSource,
     setLocationDestination,
-    handleChangeLocationCords,
     handleSetDirectionRoute,
   } = useMap();
   const { user: userDriver } = useContext(PageContext);

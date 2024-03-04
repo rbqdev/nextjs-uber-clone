@@ -5,8 +5,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/lib/shadcn/components/ui/card";
-import { getRideAmount } from "../../../../utils/getRideAmount";
-import { minimumAmount, percentagePerMeters } from "../../mocks";
 import { ArrowRightIcon, LoaderIcon, User2Icon } from "lucide-react";
 import { Button } from "@/lib/shadcn/components/ui/button";
 import { GoogleMapsDirectionsRoute } from "@/sharedTypes";
@@ -15,6 +13,7 @@ type OrderInformationCardProps = {
   isLoading: boolean;
   isSubmiting: boolean;
   directionRoutePoints: GoogleMapsDirectionsRoute;
+  currentRideAmount: string;
   onSubmitRideRequest: () => void;
 };
 
@@ -22,6 +21,7 @@ export const OrderInformationCard = ({
   isLoading,
   isSubmiting,
   directionRoutePoints,
+  currentRideAmount,
   onSubmitRideRequest,
 }: OrderInformationCardProps) => {
   if (!directionRoutePoints) {
@@ -70,14 +70,7 @@ export const OrderInformationCard = ({
                 </div>
               </div>
 
-              <span className="text-2xl font-bold">
-                {getRideAmount({
-                  distance:
-                    directionRoutePoints.routes[0].legs[0].distance?.value!,
-                  minimumAmount: minimumAmount,
-                  percentagePerMeters: percentagePerMeters,
-                })}
-              </span>
+              <span className="text-2xl font-bold">{currentRideAmount}</span>
             </div>
           </CardContent>
           <CardFooter>

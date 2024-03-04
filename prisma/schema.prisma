@@ -54,6 +54,7 @@ model RideAmountConfig {
   minimumAmount   Int
   percentagePerMeters Int
   driverPercentage Int
+  currency String
   countryLocale String
   countryAlpha2 String
 }

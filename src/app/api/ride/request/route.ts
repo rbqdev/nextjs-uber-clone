@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/configs/prisma";
-import socketClient from "@/configs/socket/client";
 import { RideRequestStatus } from "@prisma/client";
 
-/* Create RideRequest */
 export async function POST(req: NextRequest) {
   const body = await req.json();
 

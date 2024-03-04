@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useContext, useEffect, useState } from "react";
-import { minimumAmount, percentagePerMeters } from "./mocks";
 import { PageContext } from "../layout";
 import {
   createRideRequestMutation,
@@ -21,10 +20,13 @@ import { useCountup } from "@/hooks/useCountup";
 import { RideRequest } from "@/sharedTypes";
 import { useToast } from "@/lib/shadcn/components/ui/use-toast";
 import { getRideAmount } from "@/app/utils/getRideAmount";
+import { useRideAmountConfig } from "@/hooks/useRideAmountConfig";
 
 export default function Rider() {
   const { user } = useContext(PageContext);
   const { getUserByType } = useGetUser();
+  const { rideAmountConfig, isLoading: isRideAmountConfigLoading } =
+    useRideAmountConfig();
   const {
     locationSource,
     locationDestination,
@@ -43,6 +45,7 @@ export default function Rider() {
     useState<RideRequest | null>(null);
   const [currentDriver, setCurrentDriver] = useState<User>(undefined);
   const [isRideRequestLoading, setIsRideRequestLoading] = useState(false);
+  const [currentRideAmount, setCurrentRideAmount] = useState("");
   const {
     time: { minutes, seconds },
     isTimeup,
@@ -54,15 +57,19 @@ export default function Rider() {
     maxSeconds: 130, // Stop search after 30 seconds
   });
 
+  const isPageLoaded = isGoogleMapsLoaded && !isRideAmountConfigLoading;
+
   const handleSubmitRideRequest = async () => {
     setIsRideRequestLoading(true);
     const route = directionRoutePoints?.routes[0].legs[0];
     const body = {
       riderId: user?.id,
-      price: getRideAmount({
+      amount: getRideAmount({
         distance: route?.distance?.value!,
-        minimumAmount: minimumAmount,
-        percentagePerMeters: percentagePerMeters,
+        minimumAmount: rideAmountConfig?.minimumAmount!,
+        percentagePerMeters: rideAmountConfig?.percentagePerMeters!,
+        locale: rideAmountConfig?.countryLocale!,
+        currency: rideAmountConfig?.currency!,
       }),
       distance: route?.distance,
       duration: route?.duration,
@@ -129,13 +136,26 @@ export default function Rider() {
   }, [currentDriver, getUserByType]);
 
   useEffect(() => {
-    socketClient.on("toRider_rideAccepted", () => {
-      handleRideAccepted();
-    });
-    socketClient.on("toRider_rideCanceledByDriver", () => {
-      handleRideCanceledByDriver();
-    });
-  }, []);
+    if (directionRoutePoints) {
+      console.log({ directionRoutePoints, rideAmountConfig });
+      const route = directionRoutePoints?.routes[0].legs[0];
+      setCurrentRideAmount(
+        getRideAmount({
+          distance: route?.distance?.value!,
+          minimumAmount: rideAmountConfig?.minimumAmount!,
+          percentagePerMeters: rideAmountConfig?.percentagePerMeters!,
+          locale: rideAmountConfig?.countryLocale!,
+          currency: rideAmountConfig?.currency!,
+        })
+      );
+    }
+  }, [
+    directionRoutePoints,
+    rideAmountConfig?.countryLocale,
+    rideAmountConfig?.currency,
+    rideAmountConfig?.minimumAmount,
+    rideAmountConfig?.percentagePerMeters,
+  ]);
 
   useEffect(() => {
     if (
@@ -148,17 +168,27 @@ export default function Rider() {
     }
   }, [currentRideRequestFlowStep, isTimeup, resetCountup]);
 
+  useEffect(() => {
+    socketClient.on("toRider_rideAccepted", () => {
+      handleRideAccepted();
+    });
+    socketClient.on("toRider_rideCanceledByDriver", () => {
+      handleRideCanceledByDriver();
+    });
+  }, []);
+
   return (
     <div className="h-full flex gap-4">
       <section className="flex flex-col gap-4">
         {currentRideRequestFlowStep === RideRequestFlowSteps.INITIAL && (
           <RideRequestInitialStep
-            isGoogleMapsLoaded={isGoogleMapsLoaded}
+            isGoogleMapsLoaded={isPageLoaded}
             sourceAutocompleteValue={sourceAutocompleteValue}
             destinationAutocompleteValue={destinationAutocompleteValue}
             directionRoutePoints={directionRoutePoints}
             isUpdatingDirectionRoutePoints={isUpdatingDirectionRoutePoints}
             isSubmitingRequest={isRideRequestLoading}
+            currentRideAmount={currentRideAmount}
             onChangeLocationCords={handleChangeLocationCords}
             onSubmitRideRequest={handleSubmitRideRequest}
           />

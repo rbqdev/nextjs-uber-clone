@@ -1,7 +1,10 @@
 "use client";
 
-import { LocationEventDetailed } from "@/app/(pages)/rider/sharedTypes";
-import { GoogleMaps, GoogleMapsDirectionsRoute } from "@/sharedTypes";
+import {
+  GoogleMaps,
+  GoogleMapsDirectionsRoute,
+  LocationEventDetailed,
+} from "@/sharedTypes";
 import {
   GoogleMap,
   OverlayView,
@@ -82,6 +85,7 @@ export const Map = ({
       mapContainerStyle={{
         width: "100%",
         height: "100%",
+        borderRadius: "8px",
       }}
       center={center}
       zoom={16}

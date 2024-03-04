@@ -2,22 +2,26 @@ export const getRideAmount = ({
   distance,
   minimumAmount,
   percentagePerMeters,
+  locale = "en-US",
+  currency = "USD",
 }: {
   distance: number;
   minimumAmount: number;
   percentagePerMeters: number;
+  locale: string;
+  currency: string;
 }) => {
   const oneKM = 1000;
-  let price = 0;
+  let amount = 0;
 
   if (distance < oneKM) {
-    price = minimumAmount / 100;
+    amount = minimumAmount / 100;
   } else {
-    price = (minimumAmount + (percentagePerMeters * distance - oneKM)) / 100;
+    amount = (minimumAmount + (percentagePerMeters * distance - oneKM)) / 100;
   }
 
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat(locale, {
     style: "currency",
-    currency: "USD",
-  }).format(price);
+    currency,
+  }).format(amount);
 };

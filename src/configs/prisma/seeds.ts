@@ -5,6 +5,7 @@ async function main() {
   await prisma.rideRequest.deleteMany();
   await prisma.driver.deleteMany();
   await prisma.user.deleteMany();
+  await prisma.rideAmountConfig.deleteMany();
   await prisma.user.createMany({
     data: [
       {
@@ -53,14 +54,14 @@ async function main() {
       carColor: "White",
     },
   });
-
-  await prisma.ridePrices.create({
+  await prisma.rideAmountConfig.create({
     data: {
       minimumAmount: 500,
       percentagePerMeters: 1,
       driverPercentage: 70,
       countryLocale: "en-US",
       countryAlpha2: "US",
+      currency: "USD",
     },
   });
 }
