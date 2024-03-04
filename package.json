@@ -6,7 +6,7 @@
     "prisma:generate": "prisma generate",
     "dev": "nodemon",
     "seeds:generate": "ts-node ./src/configs/prisma/seeds.ts",
-    "build": "npm run prisma:generate && next build",
+    "build": "npm run prisma:generate && npm run dev",
     "start": "next start",
     "lint": "next lint"
   },
