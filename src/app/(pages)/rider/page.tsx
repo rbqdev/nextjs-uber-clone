@@ -36,6 +36,8 @@ export default function Rider() {
     isGoogleMapsLoaded,
     isUpdatingDirectionRoutePoints,
     setLocationSource,
+    setLocationDestination,
+    setDirectionRoutePoints,
     handleChangeLocationCords,
     handleSetDirectionRoute,
   } = useMap();
@@ -55,10 +57,14 @@ export default function Rider() {
     padWithZeros,
   } = useCountup({
     maxMinutes: 0,
-    maxSeconds: 130, // Stop search after 30 seconds
+    maxSeconds: 30, // Stop search after 30 seconds
   });
 
   const isPageLoaded = isGoogleMapsLoaded && !isRideAmountConfigLoading;
+
+  const resetRideStates = () => {
+    setCurrentRideRequest(null);
+  };
 
   const handleSubmitRideRequest = async () => {
     setIsRideRequestLoading(true);
@@ -97,7 +103,7 @@ export default function Rider() {
       body
     );
     if (updatedRideRequest) {
-      setCurrentRideRequest(null);
+      resetRideStates();
       setIsRideRequestLoading(false);
       setCurrentRideRequestFlowStep(RideRequestFlowSteps.INITIAL);
       socketClient.emit("toDriver_rideCanceled");
@@ -109,7 +115,7 @@ export default function Rider() {
       title: "Ride request canceled",
       description: "The ride was canceled by driver",
     });
-    setCurrentRideRequest(null);
+    resetRideStates();
     setCurrentRideRequestFlowStep(RideRequestFlowSteps.INITIAL);
   };
 
@@ -172,10 +178,10 @@ export default function Rider() {
   }, []);
 
   useEffect(() => {
-    if (currentUserPosition) {
+    if (currentUserPosition && !currentRideRequest) {
       setLocationSource(currentUserPosition);
     }
-  }, [currentUserPosition, setLocationSource]);
+  }, []);
 
   return (
     <div className="h-full flex gap-4">

@@ -135,10 +135,10 @@ export default function Driver() {
   }, []);
 
   useEffect(() => {
-    if (currentUserPosition) {
+    if (currentUserPosition && !currentRideRequest) {
       setLocationSource(currentUserPosition);
     }
-  }, [currentUserPosition, setLocationSource]);
+  }, [currentRideRequest, currentUserPosition, setLocationSource]);
 
   return (
     <div className="h-full flex justify-center gap-4">
