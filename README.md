@@ -26,7 +26,7 @@ This project was built with:
 - Postgres
   - I already worked with Posgres before and was recomended on challenge description
 - Prisma
-  - Choosed because is a easy ORM to use and with good type safe generating
+  - Choosed because is a easy ORM to use and with types generate
 ```
 
 ## Features
