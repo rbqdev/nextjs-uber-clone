@@ -4,7 +4,7 @@ import { socketInit } from "../socket/server";
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "0.0.0.0";
-const port = Number(process.env.PORT!) ?? 10000;
+const port = Number(process.env.PORT!) || 10000;
 const app = next({ dev: true, dir: ".", hostname, port });
 const handle = app.getRequestHandler();
 const server = createServer((req: IncomingMessage, res: ServerResponse) => {
