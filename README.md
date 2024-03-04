@@ -10,32 +10,23 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Recommendations
-
-- Enable Geolocation on browser
-
-- At the first screen you have two buttons which each one will open a new tab. For /rider and for /driver.
-Homepage
-<img width="1728" alt="Screenshot 2024-03-04 at 16 38 23" src="https://github.com/rbqdev/trashlab-frontend-challenge/assets/32659372/149629ea-692c-4096-861f-554ca3158de8">
-
-- So, for you be able to get a good view of the app communication, I recommend to split the two tabs as the follow image:
-Rider and Driver pages
-<img width="1728" alt="Screenshot 2024-03-04 at 16 38 11" src="https://github.com/rbqdev/trashlab-frontend-challenge/assets/32659372/f44966db-4b8f-481c-b546-04984a74ee12">
-
 ## Technologies
 
 This project was built with:
 
 ```bash
 - NexJs 14 as both (Client and Server)
-  - Custom server file
+  - Choosed because I wanted to have only one build with client and server
 - Typescript
+  - I use in 100% of my JS projects
 - Shadcn - UI + Tailwind
+  - Really great minimalist lib for UI adn UX
 - Socket.io
+  - To be able to get a real time communication between a rider and driver
 - Postgres
   - I already worked with Posgres before and was recomended on 
 - Prisma
-  - Choosed becaused is a easy ORM to use and with good type safe generating
+  - Choosed because is a easy ORM to use and with good type safe generating
 ```
 
 ## Features
@@ -142,6 +133,18 @@ This is really important: Once the bare minimum functionality is implemented, wh
   - Since this was not said on the challenge description, I think using web socket + google maps it's a powerfull combination.
 - Delightful UX.
   - As above, I think web socket provided a great UX experience specially on the app in prod.
+ 
+## App Recommendations
+
+- Enable Geolocation on browser
+
+- At the first screen you have two buttons which each one will open a new tab. For /rider and for /driver.
+Homepage
+<img width="1728" alt="Screenshot 2024-03-04 at 16 38 23" src="https://github.com/rbqdev/trashlab-frontend-challenge/assets/32659372/149629ea-692c-4096-861f-554ca3158de8">
+
+- So, for you be able to get a good view of the app communication, I recommend to split the two tabs as the follow image:
+Rider and Driver pages
+<img width="1728" alt="Screenshot 2024-03-04 at 16 38 11" src="https://github.com/rbqdev/trashlab-frontend-challenge/assets/32659372/f44966db-4b8f-481c-b546-04984a74ee12">
 
 ## Deployed on Render
 
