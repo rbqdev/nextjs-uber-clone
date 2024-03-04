@@ -96,14 +96,33 @@ Features not implemented but that I thought were important requirements and I po
 
 Some description accordingly the guidance afirmations.
 
-- You should implement this purely as web app, with different views as necessary. **Implemented Rider and Driver views**
-- This is intentionally under-specified with lots of ambiguity.
-  - What features do you think are most impactful? **For this problem, maps and web socket comunication**
-  - What scope would you cut? **For now I would cut authentications and permissions, as were recommended on challenge description**
-  - What unspoken requirements need to be implemented to provide our core service? **Google maps, Web socket comunication between rider and driver**
-- This is really important: Once the bare minimum functionality is implemented, what feature, or section of the app would you work on to make _really good? Really good here can mean, really good UI, powerful differentiating functionality, delightful UX._
-  - Make that feature sizzle!
-  - Share with us which part of the project you’re most proud of.
+```bash
+You should implement this purely as web app, with different views as necessary.
+```
+
+**Implemented Rider and Driver views**
+
+```bash
+What features do you think are most impactful?
+```
+
+**For this problem, maps and web socket comunication**
+
+```bash
+What scope would you cut?
+```
+
+**For now I would cut authentications and permissions, as were recommended on challenge description**
+
+```bash
+What unspoken requirements need to be implemented to provide our core service?
+```
+
+**Google maps, Web socket comunication between rider and driver**
+
+```bash
+This is really important: Once the bare minimum functionality is implemented, what feature, or section of the app would you work on to make _really good? Really good here can mean, really good UI, powerful differentiating functionality, delightful UX._
+```
 
 **Based on this last point, I think I focused in a mix of:**
 
