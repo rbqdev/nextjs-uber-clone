@@ -4,7 +4,6 @@ import socketClient from "@/configs/socket/client";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { PageContext } from "../layout";
 import { RideRequestStatus, User } from "@prisma/client";
-import { useDesktopNotification } from "@/hooks/useDesktopNotifications";
 import { getRideRequest } from "@/app/api/ride/request/queries";
 import { useToast } from "@/lib/shadcn/components/ui/use-toast";
 import { useRideRequest } from "@/hooks/useRideRequest";
@@ -26,7 +25,6 @@ export default function Driver() {
     handleSetDirectionRoute,
   } = useMap();
   const { user: userDriver, currentUserPosition } = useContext(PageContext);
-  const { sendDesktopNotification } = useDesktopNotification();
   const { isLoading: isMutatingRideRequest, updateRideRequest } =
     useRideRequest();
   const [isAcceptingRide, setIsAcceptingRide] = useState(false);
@@ -52,7 +50,6 @@ export default function Driver() {
           title: "New ride request",
           description: "There's a new ride request",
         });
-        sendDesktopNotification({ description: "New ride request" });
         setCurrentRideRequest(rideRequest);
         setCurrentRider(rider);
         setLocationSource(
@@ -64,13 +61,7 @@ export default function Driver() {
         handleSetDirectionRoute();
       }
     },
-    [
-      handleSetDirectionRoute,
-      sendDesktopNotification,
-      setLocationDestination,
-      setLocationSource,
-      toast,
-    ]
+    [handleSetDirectionRoute, setLocationDestination, setLocationSource, toast]
   );
 
   const handleIgnoreRideRequest = async () => {

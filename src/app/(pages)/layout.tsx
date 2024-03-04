@@ -2,7 +2,6 @@
 
 import { FullScreenLoader } from "@/components/fullScreenLoader";
 import { Header } from "@/components/header";
-import { useDesktopNotification } from "@/hooks/useDesktopNotifications";
 import { useGetUser } from "@/hooks/useGetUser";
 import { UserType } from "@prisma/client";
 import { usePathname } from "next/navigation";
@@ -23,7 +22,6 @@ export default function DashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { requestDesktopNotificationsPermission } = useDesktopNotification();
   const pathname = usePathname().replace("/", "");
   const userType = pathname === "driver" ? UserType.DRIVER : UserType.RIDER;
   const { isLoading: isUserLoading, user, getUserByType } = useGetUser();
@@ -31,7 +29,6 @@ export default function DashboardLayout({
     useCurrentUserLocation();
 
   useEffect(() => {
-    requestDesktopNotificationsPermission();
     getUserByType(userType);
   }, []);
 
