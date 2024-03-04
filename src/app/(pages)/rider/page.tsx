@@ -36,8 +36,6 @@ export default function Rider() {
     isGoogleMapsLoaded,
     isUpdatingDirectionRoutePoints,
     setLocationSource,
-    setLocationDestination,
-    setDirectionRoutePoints,
     handleChangeLocationCords,
     handleSetDirectionRoute,
   } = useMap();

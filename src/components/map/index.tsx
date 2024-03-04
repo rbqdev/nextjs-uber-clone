@@ -31,7 +31,6 @@ export const Map = ({
   shouldShowDriverPin,
   onSetDirectionRoute,
 }: MapProps) => {
-  // TODO: ask/set current user location
   const [center, setCenter] = useState({
     lat: -15.793889,
     lng: -47.882778,
