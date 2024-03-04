@@ -11,9 +11,7 @@ const server = createServer((req: IncomingMessage, res: ServerResponse) => {
   handle(req, res);
 });
 
-app.prepare().then(() => {
-  socketInit(server);
-  server.listen(port, hostname, () => {
-    console.log(`Server is running on http://${hostname}:${port}`);
-  });
+socketInit(server);
+server.listen(port, hostname, () => {
+  console.log(`Server is running on http://${hostname}:${port}`);
 });
