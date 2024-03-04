@@ -12,13 +12,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Recommendations
 
-- At the first screen you have two buttons which each one will open a new tab. For /rider and for /driver.
+- Enable Geolocation on browser
 
+- At the first screen you have two buttons which each one will open a new tab. For /rider and for /driver.
 Homepage
 <img width="1728" alt="Screenshot 2024-03-04 at 16 38 23" src="https://github.com/rbqdev/trashlab-frontend-challenge/assets/32659372/149629ea-692c-4096-861f-554ca3158de8">
 
 - So, for you be able to get a good view of the app communication, I recommend to split the two tabs as the follow image:
-
 Rider and Driver pages
 <img width="1728" alt="Screenshot 2024-03-04 at 16 38 11" src="https://github.com/rbqdev/trashlab-frontend-challenge/assets/32659372/f44966db-4b8f-481c-b546-04984a74ee12">
 
