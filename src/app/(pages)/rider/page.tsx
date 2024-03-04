@@ -137,7 +137,6 @@ export default function Rider() {
 
   useEffect(() => {
     if (directionRoutePoints) {
-      console.log({ directionRoutePoints, rideAmountConfig });
       const route = directionRoutePoints?.routes[0].legs[0];
       setCurrentRideAmount(
         getRideAmount({
@@ -149,13 +148,7 @@ export default function Rider() {
         })
       );
     }
-  }, [
-    directionRoutePoints,
-    rideAmountConfig?.countryLocale,
-    rideAmountConfig?.currency,
-    rideAmountConfig?.minimumAmount,
-    rideAmountConfig?.percentagePerMeters,
-  ]);
+  }, [directionRoutePoints, rideAmountConfig]);
 
   useEffect(() => {
     if (
