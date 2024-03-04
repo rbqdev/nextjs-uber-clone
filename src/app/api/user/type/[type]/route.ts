@@ -23,7 +23,7 @@ export async function GET(req: NextRequest, context: NextContextProps) {
 
   if (!user) {
     return NextResponse.json("User not found", {
-      status: 400,
+      status: 404,
     });
   }
 
