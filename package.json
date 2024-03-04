@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "deploy:build": "tsup src/configs/customNextServer",
-    "deploy:start": "node dist/server.js"
+    "deploy:start": "node dist/index.js"
   },
   "dependencies": {
     "@prisma/client": "^5.10.2",
