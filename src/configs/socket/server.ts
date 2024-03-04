@@ -5,7 +5,6 @@ type Payload = string | number | boolean | undefined;
 export const socketInit = (server: any) => {
   const io = new IOServer(server, {
     maxHttpBufferSize: 1e8,
-    transports: ["websocket"],
   });
   io.on("connection", (socket: Socket) => {
     socket.on("connect", () => {
