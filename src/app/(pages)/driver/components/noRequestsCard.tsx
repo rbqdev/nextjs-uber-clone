@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/lib/shadcn/components/ui/card";
 
-export const EmptyCard = () => (
+export const NoRequestsCard = () => (
   <Card className="min-w-[400px] max-w-[400px] min-h-[200px] ">
     <CardContent>
       <div className="flex flex-col items-center justify-center">

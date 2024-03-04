@@ -12,7 +12,7 @@ import { LocationEventDetailed, RideRequest } from "@/sharedTypes";
 import { useMap } from "@/hooks/useMap";
 import { Map } from "@/components/map";
 import { RideRequestCard } from "./components/rideRequestCard";
-import { EmptyCard } from "./components/emptyCard";
+import { NoRequestsCard } from "./components/noRequestsCard";
 
 export default function Driver() {
   const {
@@ -155,7 +155,7 @@ export default function Driver() {
             onIgnoreRideRequest={handleIgnoreRideRequest}
           />
         ) : (
-          <EmptyCard />
+          <NoRequestsCard />
         )}
       </section>
       <section className="flex-1 h-full bg-zinc-200 rounded-md">
