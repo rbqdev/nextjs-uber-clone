@@ -92,6 +92,8 @@ Features not implemented but that I thought were important requirements and I po
 - Small UI/UX improvements as well, trying to get the most delightful UX.
 - Responsive styles
 
+PS: I had a lot of ambiguity and issues with socket and Next14(custom server, limit size of event payloads and next deployment thinking in a "node" server), so this took me a decent amount of time which I could spent on other features.
+
 ### Guidance
 
 Some description accordingly the guidance afirmations.
