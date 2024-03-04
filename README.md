@@ -20,7 +20,7 @@ This project was built with:
 - Typescript
   - I use in 100% of my JS projects
 - Shadcn - UI + Tailwind
-  - Really great minimalist lib for UI adn UX
+  - Really great minimalist lib for UI and UX
 - Socket.io
   - To be able to get a real time communication between a rider and driver
 - Postgres
