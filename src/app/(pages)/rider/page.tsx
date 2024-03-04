@@ -19,11 +19,11 @@ import { useMap } from "@/hooks/useMap";
 import { useCountup } from "@/hooks/useCountup";
 import { RideRequest } from "@/sharedTypes";
 import { useToast } from "@/lib/shadcn/components/ui/use-toast";
-import { getRideAmount } from "@/app/utils/getRideAmount";
+import { getRideAmount } from "@/utils/getRideAmount";
 import { useRideAmountConfig } from "@/hooks/useRideAmountConfig";
 
 export default function Rider() {
-  const { user } = useContext(PageContext);
+  const { user, currentUserPosition } = useContext(PageContext);
   const { getUserByType } = useGetUser();
   const { rideAmountConfig, isLoading: isRideAmountConfigLoading } =
     useRideAmountConfig();
@@ -35,6 +35,7 @@ export default function Rider() {
     directionRoutePoints,
     isGoogleMapsLoaded,
     isUpdatingDirectionRoutePoints,
+    setLocationSource,
     handleChangeLocationCords,
     handleSetDirectionRoute,
   } = useMap();
@@ -169,6 +170,12 @@ export default function Rider() {
       handleRideCanceledByDriver();
     });
   }, []);
+
+  useEffect(() => {
+    if (currentUserPosition) {
+      setLocationSource(currentUserPosition);
+    }
+  }, [currentUserPosition, setLocationSource]);
 
   return (
     <div className="h-full flex gap-4">

@@ -84,7 +84,6 @@ export const useMap = () => {
         },
         (result, status) => {
           if (status === "OK") {
-            // @ts-ignore
             setDirectionRoutePoints(result);
           } else {
             console.error("Error to set routes");
@@ -115,6 +114,7 @@ export const useMap = () => {
     isUpdatingDirectionRoutePoints,
     setLocationSource,
     setLocationDestination,
+    setDirectionRoutePoints,
     handleChangeLocationCords,
     handleSetDirectionRoute,
   };

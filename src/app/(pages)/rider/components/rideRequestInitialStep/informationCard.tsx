@@ -50,7 +50,7 @@ export const OrderInformationCard = ({
               <div className="flex items-center">
                 <div className="flex items-center gap-1">
                   <img
-                    src="https://d1a3f4spazzrp4.cloudfront.net/car-types/haloProductImages/v1.1/Select_v1.png"
+                    src="/assets/car.png"
                     alt="carImg"
                     width={80}
                     height={80}

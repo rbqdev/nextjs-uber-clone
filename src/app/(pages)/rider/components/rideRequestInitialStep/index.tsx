@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/lib/shadcn/components/ui/card";
-import { GooglePlacesAutocompleteInput } from "./googlePlacesAutocomplete";
+import { GooglePlacesAutocompleteInput } from "./googlePlacesAutocompleteInput";
 import { OrderInformationCard } from "./informationCard";
 import { GoogleMapsDirectionsRoute, LocationEvent } from "@/sharedTypes";
 

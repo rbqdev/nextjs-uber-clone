@@ -45,7 +45,7 @@ export const RideRequestSearchingDriverStep = ({
         <div className="relative flex items-center justify-center ">
           <div className="absolute bg-blue-400 animate-ping w-[80px] h-[80px] z-0 rounded-full"></div>
           <img
-            src="https://d1a3f4spazzrp4.cloudfront.net/car-types/haloProductImages/v1.1/Select_v1.png"
+            src="/assets/car.png"
             alt="carImg"
             width={200}
             height={200}

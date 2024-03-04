@@ -22,9 +22,10 @@ export default function Driver() {
     isGoogleMapsLoaded,
     setLocationSource,
     setLocationDestination,
+    setDirectionRoutePoints,
     handleSetDirectionRoute,
   } = useMap();
-  const { user: userDriver } = useContext(PageContext);
+  const { user: userDriver, currentUserPosition } = useContext(PageContext);
   const { sendDesktopNotification } = useDesktopNotification();
   const { isLoading: isMutatingRideRequest, updateRideRequest } =
     useRideRequest();
@@ -33,7 +34,15 @@ export default function Driver() {
   const [currentRideRequest, setCurrentRideRequest] =
     useState<RideRequest | null>(null);
   const [currentRider, setCurrentRider] = useState<User | null>(null);
-  const { toast, toasts } = useToast();
+  const { toast } = useToast();
+
+  const resetRideStates = () => {
+    setCurrentRideRequest(null);
+    setCurrentRider(null);
+    setLocationSource(null);
+    setLocationDestination(null);
+    setDirectionRoutePoints(null);
+  };
 
   const handleNewRideRequest = useCallback(
     async (id: number) => {
@@ -65,8 +74,7 @@ export default function Driver() {
   );
 
   const handleIgnoreRideRequest = async () => {
-    setCurrentRider(null);
-    setCurrentRideRequest(null);
+    resetRideStates();
   };
 
   const handleAcceptRideRequest = async () => {
@@ -97,8 +105,7 @@ export default function Driver() {
     });
 
     if (rideRequest) {
-      setCurrentRider(null);
-      setCurrentRideRequest(null);
+      resetRideStates();
       setIsCancelingRide(false);
       socketClient.emit("toRider_rideCanceledByDriver");
     }
@@ -112,8 +119,7 @@ export default function Driver() {
       title: "Ride request canceled",
       description: "The ride was canceled by rider",
     });
-    setCurrentRideRequest(null);
-    setCurrentRider(null);
+    resetRideStates();
   }, [currentRideRequest, toast]);
 
   useEffect(() => {
@@ -128,6 +134,12 @@ export default function Driver() {
     });
   }, []);
 
+  useEffect(() => {
+    if (currentUserPosition) {
+      setLocationSource(currentUserPosition);
+    }
+  }, [currentUserPosition, setLocationSource]);
+
   return (
     <div className="h-full flex justify-center gap-4">
       <section>
@@ -135,7 +147,9 @@ export default function Driver() {
           <RideRequestCard
             currentRideRequest={currentRideRequest}
             currentRider={currentRider}
-            isLoading={isAcceptingRide || isCancelingRide}
+            isLoading={
+              isAcceptingRide || isCancelingRide || isMutatingRideRequest
+            }
             onAcceptRideRequest={handleAcceptRideRequest}
             onCancelAcceptedRideRequest={handleCancelAcceptedRide}
             onIgnoreRideRequest={handleIgnoreRideRequest}

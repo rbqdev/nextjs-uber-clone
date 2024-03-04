@@ -7,11 +7,13 @@ import { useGetUser } from "@/hooks/useGetUser";
 import { UserType } from "@prisma/client";
 import { usePathname } from "next/navigation";
 import { createContext, useEffect } from "react";
-import { User } from "@/sharedTypes";
+import { LocationEventDetailed, User } from "@/sharedTypes";
 import { Toaster } from "@/lib/shadcn/components/ui/toaster";
+import { useCurrentUserLocation } from "@/hooks/useCurrentUserLocation";
 
 type PageContextProps = {
   user?: User;
+  currentUserPosition?: LocationEventDetailed | null;
 };
 
 export const PageContext = createContext({} as PageContextProps);
@@ -25,13 +27,15 @@ export default function DashboardLayout({
   const pathname = usePathname().replace("/", "");
   const userType = pathname === "driver" ? UserType.DRIVER : UserType.RIDER;
   const { isLoading: isUserLoading, user, getUserByType } = useGetUser();
+  const { currentUserPosition, isLoading: isCurrentLocationLoading } =
+    useCurrentUserLocation();
 
   useEffect(() => {
     requestDesktopNotificationsPermission();
     getUserByType(userType);
   }, []);
 
-  if (isUserLoading) {
+  if (isUserLoading || isCurrentLocationLoading) {
     return <FullScreenLoader />;
   }
 
@@ -39,7 +43,9 @@ export default function DashboardLayout({
     <div className="flex flex-col items-center h-screen">
       <Header user={user} />
       <div className="w-full h-screen max-w-[1400px] py-6 px-6">
-        <PageContext.Provider value={{ user }}>{children}</PageContext.Provider>
+        <PageContext.Provider value={{ user, currentUserPosition }}>
+          {children}
+        </PageContext.Provider>
       </div>
       <Toaster />
     </div>

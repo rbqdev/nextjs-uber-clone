@@ -58,11 +58,7 @@ export const RideRequestAcceptedStep = ({
                 <p>{currentDriver?.driver?.carColor}</p>
               </div>
 
-              <img
-                src="https://d1a3f4spazzrp4.cloudfront.net/car-types/haloProductImages/v1.1/Select_v1.png"
-                alt="carImg"
-                width={45}
-              />
+              <img src="/assets/car.png" alt="carImg" width={45} />
             </div>
             <div className="flex items-center border px-4 gap-2 rounded-md bg-zinc-100 py-2">
               <div className="flex items-center text-sm font-medium">
