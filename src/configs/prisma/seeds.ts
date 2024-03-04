@@ -8,29 +8,59 @@ async function main() {
   await prisma.user.createMany({
     data: [
       {
-        name: "Goober Rider",
-        email: "rider@email.com",
+        name: "Rider #1",
+        email: "rider1@email.com",
         type: "RIDER",
-        avatarUrl:
-          "https://img.freepik.com/fotos-gratis/foto-de-close-up-de-um-jovem-barbudo-encantador-encantado-com-bigode-nos-oculos-e-gorro-preto-da-moda-sorrindo-alegremente-e-rindo-sentindo-se-satisfeito-e-com-sorte_176420-23530.jpg",
+        avatarUrl: "https://ui.shadcn.com/avatars/01.png",
       },
       {
-        name: "Goober Driver",
-        email: "driver@email.com",
+        name: "Rider #2",
+        email: "rider2@email.com",
+        type: "RIDER",
+        avatarUrl: "https://ui.shadcn.com/avatars/02.png",
+      },
+      {
+        name: "Driver #1",
+        email: "driver1@email.com",
         type: "DRIVER",
-        avatarUrl:
-          "https://img.freepik.com/fotos-gratis/homem-retrato-rindo_23-2148859448.jpg",
+        avatarUrl: "https://ui.shadcn.com/avatars/03.png",
+      },
+      {
+        name: "Driver #2",
+        email: "driver2@email.com",
+        type: "DRIVER",
+        avatarUrl: "https://ui.shadcn.com/avatars/04.png",
       },
     ],
   });
-  const driver = await prisma.user.findFirst({
-    where: { email: "driver@email.com" },
+  const driver1 = await prisma.user.findFirst({
+    where: { email: "driver1@email.com" },
   });
   await prisma.driver.create({
     data: {
-      userId: driver.id,
+      userId: driver1.id,
       carName: "Honda Civic",
       carColor: "White",
+    },
+  });
+  const driver2 = await prisma.user.findFirst({
+    where: { email: "driver2@email.com" },
+  });
+  await prisma.driver.create({
+    data: {
+      userId: driver2.id,
+      carName: "Toyota Corolla",
+      carColor: "White",
+    },
+  });
+
+  await prisma.ridePrices.create({
+    data: {
+      minimumAmount: 500,
+      percentagePerMeters: 1,
+      driverPercentage: 70,
+      countryLocale: "en-US",
+      countryAlpha2: "US",
     },
   });
 }

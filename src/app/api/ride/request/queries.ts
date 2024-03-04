@@ -6,7 +6,7 @@ export const getRideRequest = async (id: number) => {
   try {
     const response = await fetch(`${baseUrl}/api/ride/request/${id}`);
     const { data } = await response.json();
-    return data as { rideRequest: RideRequest; rideUser: User };
+    return data as { rideRequest: RideRequest; rider: User };
   } catch (error) {
     throw new Error("Something wrong");
   }

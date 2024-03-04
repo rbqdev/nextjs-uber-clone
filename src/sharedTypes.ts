@@ -14,6 +14,7 @@ type RideRequestJsonValuesParsed = {
   label: string;
   text: string;
 };
+
 export type RideRequest = PrismaRideRequest & {
   duration: RideRequestJsonValuesParsed;
   distance: RideRequestJsonValuesParsed;

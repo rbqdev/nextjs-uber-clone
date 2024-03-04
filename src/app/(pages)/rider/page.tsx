@@ -1,9 +1,7 @@
 "use client";
 
 import { useCallback, useContext, useEffect, useState } from "react";
-import { useJsApiLoader } from "@react-google-maps/api";
-import { getRidePrice } from "./utils/getRidePrice";
-import { minimumPrice, pricePerMeters } from "./mocks";
+import { minimumAmount, percentagePerMeters } from "./mocks";
 import { PageContext } from "../layout";
 import {
   createRideRequestMutation,
@@ -21,6 +19,8 @@ import { Map } from "@/components/map";
 import { useMap } from "@/hooks/useMap";
 import { useCountup } from "@/hooks/useCountup";
 import { RideRequest } from "@/sharedTypes";
+import { useToast } from "@/lib/shadcn/components/ui/use-toast";
+import { getRideAmount } from "@/app/utils/getRideAmount";
 
 export default function Rider() {
   const { user } = useContext(PageContext);
@@ -36,6 +36,7 @@ export default function Rider() {
     handleChangeLocationCords,
     handleSetDirectionRoute,
   } = useMap();
+  const { toast } = useToast();
   const [currentRideRequestFlowStep, setCurrentRideRequestFlowStep] =
     useState<RideRequestFlowSteps>(RideRequestFlowSteps.INITIAL);
   const [currentRideRequest, setCurrentRideRequest] =
@@ -45,11 +46,12 @@ export default function Rider() {
   const {
     time: { minutes, seconds },
     isTimeup,
-    setIsTimeup,
+    resetCountup,
     incrementCountup,
+    padWithZeros,
   } = useCountup({
     maxMinutes: 0,
-    maxSeconds: 30, // Stop search after 30 seconds
+    maxSeconds: 130, // Stop search after 30 seconds
   });
 
   const handleSubmitRideRequest = async () => {
@@ -57,10 +59,10 @@ export default function Rider() {
     const route = directionRoutePoints?.routes[0].legs[0];
     const body = {
       riderId: user?.id,
-      price: getRidePrice({
+      price: getRideAmount({
         distance: route?.distance?.value!,
-        minimumPrice: minimumPrice,
-        pricePerMeters: pricePerMeters,
+        minimumAmount: minimumAmount,
+        percentagePerMeters: percentagePerMeters,
       }),
       distance: route?.distance,
       duration: route?.duration,
@@ -70,10 +72,10 @@ export default function Rider() {
     const { rideRequest } = await createRideRequestMutation(body);
 
     if (rideRequest && rideRequest.status === RideRequestStatus.SEARCHING) {
-      socketClient.emit("toDriver_newRideRequest", rideRequest.id);
       setCurrentRideRequest(rideRequest);
       setIsRideRequestLoading(false);
       setCurrentRideRequestFlowStep(RideRequestFlowSteps.SEARCHING_DRIVER);
+      socketClient.emit("toDriver_newRideRequest", rideRequest.id);
     }
   };
 
@@ -92,6 +94,15 @@ export default function Rider() {
       setCurrentRideRequestFlowStep(RideRequestFlowSteps.INITIAL);
       socketClient.emit("toDriver_rideCanceled");
     }
+  };
+
+  const handleRideCanceledByDriver = () => {
+    toast({
+      title: "Ride request canceled",
+      description: "The ride was canceled by driver",
+    });
+    setCurrentRideRequest(null);
+    setCurrentRideRequestFlowStep(RideRequestFlowSteps.INITIAL);
   };
 
   const handleRideAccepted = useCallback(async () => {
@@ -121,19 +132,21 @@ export default function Rider() {
     socketClient.on("toRider_rideAccepted", () => {
       handleRideAccepted();
     });
+    socketClient.on("toRider_rideCanceledByDriver", () => {
+      handleRideCanceledByDriver();
+    });
   }, []);
 
   useEffect(() => {
-    // Handle timeup when is searching driver
     if (
       currentRideRequestFlowStep === RideRequestFlowSteps.SEARCHING_DRIVER &&
       isTimeup
     ) {
       setCurrentRideRequestFlowStep(RideRequestFlowSteps.INITIAL);
-      setIsTimeup(false);
+      resetCountup();
       socketClient.emit("toDriver_rideCanceled");
     }
-  }, [currentRideRequestFlowStep, isTimeup, setIsTimeup]);
+  }, [currentRideRequestFlowStep, isTimeup, resetCountup]);
 
   return (
     <div className="h-full flex gap-4">
@@ -155,8 +168,8 @@ export default function Rider() {
           RideRequestFlowSteps.SEARCHING_DRIVER && (
           <RideRequestSearchingDriverStep
             isLoading={isRideRequestLoading}
-            minutes={minutes}
-            seconds={seconds}
+            minutes={padWithZeros(minutes, 2)}
+            seconds={padWithZeros(seconds, 2)}
             isTimeup={isTimeup}
             onCancelRideRequest={handleCancelRideRequest}
             onIncrementCountup={incrementCountup}

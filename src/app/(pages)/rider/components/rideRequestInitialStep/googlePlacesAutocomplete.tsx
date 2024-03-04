@@ -24,7 +24,7 @@ export const GooglePlacesAutocompleteInput = ({
 }: GooglePlacesAutocompleteInputProps) => {
   return (
     <div className="relative border rounded-md bg-zinc-100">
-      <div className="absolute top-3.5 left-2 z-[1]">{leftIcon}</div>
+      <div className="absolute top-3 left-2 z-[1]">{leftIcon}</div>
       {isGoogleMapsLoaded ? (
         <GooglePlacesAutocomplete
           apiKey={googleApiKey}
@@ -42,13 +42,13 @@ export const GooglePlacesAutocompleteInput = ({
                 display: "flex",
                 border: "none",
                 paddingLeft: "24px",
-                height: "45px",
+                height: "40px",
               }),
             },
           }}
         />
       ) : (
-        <Skeleton className="h-[45px] w-full" />
+        <Skeleton className="h-[40px] w-full" />
       )}
     </div>
   );

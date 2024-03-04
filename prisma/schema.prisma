@@ -49,18 +49,19 @@ model Driver {
   carColor String
 }
 
-model RidePrices {
+model RideAmountConfig {
   id             Int @id @default(autoincrement())
-  minimumPrice   Int
-  pricePerMeters Int
+  minimumAmount   Int
+  percentagePerMeters Int
   driverPercentage Int
+  countryLocale String
   countryAlpha2 String
 }
 model RideRequest {
   id           Int         @id @default(autoincrement())
   riderId  Int
   driverId Int?
-  price        String
+  amount        String
   distance     Json
   duration     Json
   source       Json

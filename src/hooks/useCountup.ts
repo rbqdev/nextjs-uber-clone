@@ -11,10 +11,14 @@ export const useCountup = ({ maxMinutes, maxSeconds }: UseCountupProps) => {
   const [time, setTime] = useState({ minutes: 0, seconds: 0 });
   const [isTimeup, setIsTimeup] = useState(false);
 
+  const resetCountup = () => {
+    setTime(defaultTime);
+  };
+
   const incrementCountup = () => {
     if (time.minutes === maxMinutes && time.seconds === maxSeconds) {
       setIsTimeup(true);
-      setTime(defaultTime);
+      resetCountup();
       return;
     }
 
@@ -29,5 +33,9 @@ export const useCountup = ({ maxMinutes, maxSeconds }: UseCountupProps) => {
     });
   };
 
-  return { time, isTimeup, incrementCountup, setIsTimeup };
+  const padWithZeros = (number: number, length: number) => {
+    return number.toString().padStart(length, "0");
+  };
+
+  return { time, isTimeup, incrementCountup, resetCountup, padWithZeros };
 };

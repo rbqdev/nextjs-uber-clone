@@ -24,8 +24,8 @@ export const socketInit = (server: any) => {
     socket.on("toRider_rideAccepted", (payload: Payload) => {
       io.emit("toRider_rideAccepted", payload);
     });
-    socket.on("toRider_rideDeclined", () => {
-      io.emit("toRider_rideDeclined");
+    socket.on("toRider_rideCanceledByDriver", () => {
+      io.emit("toRider_rideCanceledByDriver");
     });
 
     /** Driver events */

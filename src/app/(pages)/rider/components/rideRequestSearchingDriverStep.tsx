@@ -13,8 +13,8 @@ import { useEffect } from "react";
 
 type RideRequestSearchingDriverStepProps = {
   isLoading: boolean;
-  minutes: number;
-  seconds: number;
+  minutes: string | number;
+  seconds: string | number;
   isTimeup: boolean;
   onIncrementCountup: () => void;
   onCancelRideRequest: () => void;
@@ -47,9 +47,9 @@ export const RideRequestSearchingDriverStep = ({
           <img
             src="https://d1a3f4spazzrp4.cloudfront.net/car-types/haloProductImages/v1.1/Select_v1.png"
             alt="carImg"
-            width={80}
-            height={80}
-            className="z-10 w-[200px] h-[200px]"
+            width={200}
+            height={200}
+            className="z-10"
           />
         </div>
 
@@ -59,8 +59,8 @@ export const RideRequestSearchingDriverStep = ({
       </CardContent>
       <CardFooter>
         <Button
-          variant="destructive"
-          className="w-full flex items-center gap-2 font-bold"
+          variant="secondary"
+          className="w-full flex items-center gap-2 font-bold text-red-600"
           onClick={onCancelRideRequest}
           disabled={isLoading}
         >

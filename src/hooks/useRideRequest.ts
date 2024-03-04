@@ -18,7 +18,6 @@ export const useRideRequest = () => {
     setIsLoading(true);
     const orderResponse = await updateRideRequestMutation(id, body);
     setIsLoading(false);
-
     return orderResponse;
   };
 

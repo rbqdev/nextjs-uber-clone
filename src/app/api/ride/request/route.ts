@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       status: RideRequestStatus.SEARCHING,
     },
   });
-  const rideUser = await prisma.user.findFirst({
+  const rider = await prisma.user.findFirst({
     where: { id: rideRequest?.riderId },
   });
 
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json(
-    { data: { rideRequest, rideUser } },
+    { data: { rideRequest, rider } },
     {
       status: 200,
     }

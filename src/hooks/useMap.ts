@@ -113,6 +113,8 @@ export const useMap = () => {
     locationDestination,
     directionRoutePoints,
     isUpdatingDirectionRoutePoints,
+    setLocationSource,
+    setLocationDestination,
     handleChangeLocationCords,
     handleSetDirectionRoute,
   };

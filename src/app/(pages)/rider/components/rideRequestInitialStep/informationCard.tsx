@@ -1,19 +1,15 @@
-import DestinationIconSvg from "@/assets/svg/DestinationIconSvg";
-import SourceIconSvg from "@/assets/svg/SourceIconSvg";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/lib/shadcn/components/ui/card";
-import { getRidePrice } from "../../utils/getRidePrice";
-import { minimumPrice, pricePerMeters } from "../../mocks";
+import { getRideAmount } from "../../../../utils/getRideAmount";
+import { minimumAmount, percentagePerMeters } from "../../mocks";
 import { ArrowRightIcon, LoaderIcon, User2Icon } from "lucide-react";
 import { Button } from "@/lib/shadcn/components/ui/button";
-import { GoogleMapsDirectionsRoute, LocationEvent } from "../../sharedTypes";
-import { GooglePlacesAutocompleteInput } from "./googlePlacesAutocomplete";
+import { GoogleMapsDirectionsRoute } from "@/sharedTypes";
 
 type OrderInformationCardProps = {
   isLoading: boolean;
@@ -75,11 +71,11 @@ export const OrderInformationCard = ({
               </div>
 
               <span className="text-2xl font-bold">
-                {getRidePrice({
+                {getRideAmount({
                   distance:
                     directionRoutePoints.routes[0].legs[0].distance?.value!,
-                  minimumPrice: minimumPrice,
-                  pricePerMeters: pricePerMeters,
+                  minimumAmount: minimumAmount,
+                  percentagePerMeters: percentagePerMeters,
                 })}
               </span>
             </div>

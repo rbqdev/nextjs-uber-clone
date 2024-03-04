@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/lib/shadcn/components/ui/card";
-import { DotIcon, LoaderIcon, StarIcon } from "lucide-react";
+import { DotIcon, LoaderIcon, MapIcon, StarIcon } from "lucide-react";
 import SourceIconSvg from "@/assets/svg/SourceIconSvg";
 import DestinationIconSvg from "@/assets/svg/DestinationIconSvg";
 import { User, RideRequest } from "@/sharedTypes";
@@ -36,6 +36,7 @@ export const RideRequestAcceptedStep = ({
             className="rounded-full border-4 border-white w-[120px]"
             src={currentDriver?.avatarUrl}
             alt={currentDriver?.name}
+            width={120}
           />
         </div>
 
@@ -50,17 +51,24 @@ export const RideRequestAcceptedStep = ({
           </div>
 
           <div className="flex flex-col gap-2">
-            <div className="flex items-center border px-4 gap-2 rounded-md bg-zinc-100">
-              <img
-                src="https://d1a3f4spazzrp4.cloudfront.net/car-types/haloProductImages/v1.1/Select_v1.png"
-                alt="carImg"
-                className="w-[45px]"
-              />
-
+            <div className="flex items-center justify-between  border px-4 gap-2 rounded-md bg-zinc-100">
               <div className="flex items-center text-sm font-medium">
                 <p>{currentDriver?.driver?.carName}</p>
                 <DotIcon />
                 <p>{currentDriver?.driver?.carColor}</p>
+              </div>
+
+              <img
+                src="https://d1a3f4spazzrp4.cloudfront.net/car-types/haloProductImages/v1.1/Select_v1.png"
+                alt="carImg"
+                width={45}
+              />
+            </div>
+            <div className="flex items-center border px-4 gap-2 rounded-md bg-zinc-100 py-2">
+              <div className="flex items-center text-sm font-medium">
+                <p>{currentRideRequest?.distance?.text}</p>
+                <DotIcon />
+                <p>{currentRideRequest?.duration?.text}</p>
               </div>
             </div>
             <div className="relative flex flex-col border px-4 py-2 gap-4 rounded-md bg-zinc-100">
@@ -90,9 +98,9 @@ export const RideRequestAcceptedStep = ({
             </div>
 
             {/* RideRequest status ACCEPTED */}
-            <div className="flex items-center justify-between px-4 py-2 rounded-md bg-black text-white text-xs">
+            <div className="flex items-center justify-between px-4 py-2 rounded-md bg-green-600 text-white text-xs">
               <p>Driver will arrive in:</p>
-              <span className="px-2 py-1 bg-zinc-800 rounded-md font-medium">
+              <span className="px-2 py-1 bg-green-500 rounded-md font-medium">
                 05:30Mins
               </span>
             </div>
@@ -101,8 +109,8 @@ export const RideRequestAcceptedStep = ({
           </div>
 
           <Button
-            variant="destructive"
-            className="w-full flex items-center gap-2 font-bold"
+            variant="secondary"
+            className="w-full flex items-center gap-2 font-bold text-red-600"
             onClick={onCancelRideRequest}
             disabled={isLoading}
           >

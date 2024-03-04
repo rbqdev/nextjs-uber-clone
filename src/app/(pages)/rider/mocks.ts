@@ -1,2 +1,2 @@
-export const minimumPrice = 500; // Cents
-export const pricePerMeters = 1; // Cents
+export const minimumAmount = 500; // Cents
+export const percentagePerMeters = 1; // Cents

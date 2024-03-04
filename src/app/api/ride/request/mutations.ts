@@ -13,7 +13,7 @@ export const createRideRequestMutation = async (body: Record<string, any>) => {
       body: JSON.stringify(body),
     });
     const { data } = await response.json();
-    return data as { rideRequest: RideRequest; rideUser: User };
+    return data as { rideRequest: RideRequest; rider: User };
   } catch (error) {
     throw new Error("Something wrong with create ride request");
   }
@@ -32,7 +32,7 @@ export const updateRideRequestMutation = async (
       body: JSON.stringify(body),
     });
     const { data } = await response.json();
-    return data as { rideRequest: RideRequest; rideUser: User };
+    return data as { rideRequest: RideRequest; rider: User };
   } catch (error) {
     throw new Error("Something wrong with update ride request");
   }

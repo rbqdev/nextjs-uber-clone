@@ -91,7 +91,7 @@ export const Map = ({
     >
       {locationSource && (
         <MarkerF
-          icon={shouldShowDriverPin ? "/assets/location-pin.png" : undefined}
+          icon={shouldShowDriverPin ? "/assets/car-pin.png" : undefined}
           position={{
             lat: locationSource?.lat!,
             lng: locationSource?.lng!,

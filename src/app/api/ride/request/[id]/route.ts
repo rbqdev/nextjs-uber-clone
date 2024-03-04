@@ -15,7 +15,7 @@ export async function GET(req: NextRequest, context: NextContextProps) {
   const rideRequest = await prisma.rideRequest.findFirst({
     where: { id },
   });
-  const rideUser = await prisma.user.findFirst({
+  const rider = await prisma.user.findFirst({
     where: { id: rideRequest?.riderId },
   });
 
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest, context: NextContextProps) {
   }
 
   return NextResponse.json(
-    { data: { rideRequest, rideUser } },
+    { data: { rideRequest, rider } },
     {
       status: 200,
     }
@@ -42,7 +42,7 @@ export async function PUT(req: NextRequest, context: NextContextProps) {
     },
     data: body,
   });
-  const rideUser = await prisma.user.findFirst({
+  const rider = await prisma.user.findFirst({
     where: { id: rideRequest?.riderId },
   });
 
@@ -56,7 +56,7 @@ export async function PUT(req: NextRequest, context: NextContextProps) {
   }
 
   return NextResponse.json(
-    { data: { rideRequest, rideUser } },
+    { data: { rideRequest, rider } },
     {
       status: 200,
     }
